@@ -16,7 +16,7 @@
 package ru.surfstudio.mvi.core.reducer
 
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.state.MutableState
+import ru.surfstudio.mvi.core.state.MutableStateHolder
 
 /**
  * [Reducer] in terms of `Redux`:
@@ -26,9 +26,9 @@ import ru.surfstudio.mvi.core.state.MutableState
  *
  * [Reducers documentation](https://redux.js.org/basics/reducers)
  */
-interface Reducer<E : Event, State> : Reactor<E, MutableState<State, *>> {
+interface Reducer<E : Event, State> : Reactor<E, MutableStateHolder<State, *>> {
 
-    override fun react(sh: MutableState<State, *>, event: E) {
+    override fun react(sh: MutableStateHolder<State, *>, event: E) {
         val oldState = sh.currentState
         val newState = reduce(oldState, event)
         if (isStateChanged(oldState, newState)) {

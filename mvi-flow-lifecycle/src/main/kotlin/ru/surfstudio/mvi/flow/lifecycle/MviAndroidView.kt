@@ -60,7 +60,7 @@ interface MVIView<S : Any, E : Event> {
     @OptIn(InternalCoroutinesApi::class)
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
-            viewModel.state
+            viewModel.stateHolder
                 .observeState()
                 .collect(FlowCollector { collector(it) })
         }

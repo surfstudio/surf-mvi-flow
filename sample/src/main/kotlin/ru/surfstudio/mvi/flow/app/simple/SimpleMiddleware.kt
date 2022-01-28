@@ -19,19 +19,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 import ru.surfstudio.mvi.flow.app.request.RequestState
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import java.io.IOException
 
 class SimpleMiddleware(
-    private val state: FlowState<SimpleState>
+    private val stateHolder: FlowStateHolder<SimpleState>
 ) : DslFlowMiddleware<SimpleEvent> {
 
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleEvent.StartLoadingClick::class filter { state.currentState.request == RequestState.None } streamMap { requestFlow(it) },
+                SimpleEvent.StartLoadingClick::class filter { stateHolder.currentState.request == RequestState.None } streamMap { requestFlow(it) },
                 SimpleEvent.SimpleClick::class streamMapTo { clicks -> clicksFlow(clicks) },
             )
         }

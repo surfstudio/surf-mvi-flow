@@ -28,7 +28,7 @@ import ru.surfstudio.mvi.flow.lifecycle.MviAndroidView
 
 class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEvent> {
 
-    override val viewModel by viewModels<SimpleViewModel>()
+    override val viewModel by viewModels<SimpleViewModel> { SimpleViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
