@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.lifecycle
+package ru.surfstudio.mvi.mappers.handler
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -26,13 +26,13 @@ import ru.surfstudio.mvi.core.event.Event
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes
  */
-interface MviAndroidView<S : Any, E : Event> : MVIView<S, E>, LifecycleOwner {
+interface MviErrorHandlerAndroidView<S : Any, E : Event> : MVIErrorHandlerView<S, E>, LifecycleOwner {
 
     override val uiScope: CoroutineScope
         get() = lifecycleScope
 }
 
-interface MVIView<S : Any, E : Event> {
+interface MVIErrorHandlerView<S : Any, E : Event> {
 
     /**
      * Scope to observe on state changes and to emit events
@@ -42,7 +42,7 @@ interface MVIView<S : Any, E : Event> {
     /**
      * viewModel providing event hub for event emission and observable state
      */
-    val viewModel: MviViewModel<S, E>
+    val viewModel: MviErrorHandlerViewModel<S, E>
 
     /**
      * Emits [event] to a hub which is provided by [viewModel]
@@ -59,7 +59,7 @@ interface MVIView<S : Any, E : Event> {
     @OptIn(InternalCoroutinesApi::class)
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
-            viewModel.stateHolder
+            viewModel.state
                 .observeState()
                 .collect { collector(it) }
         }

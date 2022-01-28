@@ -14,6 +14,7 @@ dependencies {
     implementation("ru.surfstudio.mvi:mvi-core:${version}")
     implementation("ru.surfstudio.mvi:mvi-flow:${version}")
     implementation("ru.surfstudio.mvi:mvi-flow-lifecycle:${version}")
+    implementation("ru.surfstudio.mvi:mvi-mappers:${version}")
 }
 ```
 

@@ -13,20 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.mappers.handler
 
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.flow.app.simple.request.RequestState
+import ru.surfstudio.mvi.flow.lifecycle.MviViewModel
 
-sealed class SimpleEvent: Event {
+/** More complex [MviViewModel] implementation which reducer is able to handle errors */
+abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviViewModel<S, E>() {
 
-    object SimpleClick: SimpleEvent()
-    object IncrementClick : SimpleEvent()
-    object DecrementClick : SimpleEvent()
-
-    object StartLoadingClick : SimpleEvent()
-
-    data class RequestEvent(val request: RequestState): SimpleEvent()
-
-    data class TitleUpdate(val title: String): SimpleEvent()
+    abstract override val reducer: ErrorHandlerReducer<E, S>
 }

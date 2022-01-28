@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.flow.app.handler.error
 
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.flow.app.simple.request.RequestState
+/** Sample exception for no internet state */
+class NoInternetException : RuntimeException()
 
-sealed class SimpleEvent: Event {
-
-    object SimpleClick: SimpleEvent()
-    object IncrementClick : SimpleEvent()
-    object DecrementClick : SimpleEvent()
-
-    object StartLoadingClick : SimpleEvent()
-
-    data class RequestEvent(val request: RequestState): SimpleEvent()
-
-    data class TitleUpdate(val title: String): SimpleEvent()
-}
+/** Sample exception for non-authorized user */
+class NonAuthorizedException : RuntimeException()

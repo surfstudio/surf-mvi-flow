@@ -13,20 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.mappers.handler
 
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.flow.app.simple.request.RequestState
-
-sealed class SimpleEvent: Event {
-
-    object SimpleClick: SimpleEvent()
-    object IncrementClick : SimpleEvent()
-    object DecrementClick : SimpleEvent()
-
-    object StartLoadingClick : SimpleEvent()
-
-    data class RequestEvent(val request: RequestState): SimpleEvent()
-
-    data class TitleUpdate(val title: String): SimpleEvent()
+/** Base error handler which is using in mappers for Reducer */
+interface ErrorHandler {
+    fun handleError(e: Throwable)
 }

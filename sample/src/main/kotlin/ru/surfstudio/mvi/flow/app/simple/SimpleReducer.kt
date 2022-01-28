@@ -16,7 +16,7 @@
 package ru.surfstudio.mvi.flow.app.simple
 
 import ru.surfstudio.mvi.core.reducer.Reducer
-import ru.surfstudio.mvi.flow.app.request.RequestState
+import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 
 data class SimpleState(
     val title: String = "Кликай меня полностью",

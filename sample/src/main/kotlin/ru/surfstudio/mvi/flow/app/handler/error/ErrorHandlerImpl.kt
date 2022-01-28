@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.flow.app.handler.error
 
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.flow.app.simple.request.RequestState
+import android.util.Log
+import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 
-sealed class SimpleEvent: Event {
+/** Sample error handler. The showing of snackbar could be added here for each error in real app */
+class ErrorHandlerImpl : ErrorHandler {
 
-    object SimpleClick: SimpleEvent()
-    object IncrementClick : SimpleEvent()
-    object DecrementClick : SimpleEvent()
-
-    object StartLoadingClick : SimpleEvent()
-
-    data class RequestEvent(val request: RequestState): SimpleEvent()
-
-    data class TitleUpdate(val title: String): SimpleEvent()
+    override fun handleError(e: Throwable) {
+        Log.e("Error", "Sample", e)
+    }
 }

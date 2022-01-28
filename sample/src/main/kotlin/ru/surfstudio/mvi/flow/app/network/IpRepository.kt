@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.request
+package ru.surfstudio.mvi.flow.app.network
 
-sealed class RequestState {
-    object None: RequestState()
-    object Loading: RequestState()
-    object Success: RequestState()
-    object Error: RequestState()
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
+class IpRepository(private val api: IpApi) {
+
+    fun getIpCountry(): Flow<String> = flow {
+        delay(2000L) // test delay
+        emit(api.getIp().country)
+    }.flowOn(Dispatchers.IO)
 }

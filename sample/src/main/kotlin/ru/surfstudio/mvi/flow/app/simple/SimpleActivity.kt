@@ -15,6 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -23,7 +24,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import ru.surfstudio.mvi.flow.app.R
-import ru.surfstudio.mvi.flow.app.request.RequestState
+import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
+import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.flow.lifecycle.MviAndroidView
 
 class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEvent> {
@@ -32,7 +34,7 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_simple)
         val counterTv = findViewById<TextView>(R.id.counter_tv)
         val incrementBtn = findViewById<Button>(R.id.increment_btn)
         val decrementBtn = findViewById<Button>(R.id.decrement_btn)
@@ -41,6 +43,11 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
 
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         val loadingBtn = findViewById<Button>(R.id.loading_btn)
+
+        val handlerBtn = findViewById<Button>(R.id.handler_btn)
+        handlerBtn.setOnClickListener {
+            startActivity(Intent(this, HandlerActivity::class.java))
+        }
 
         loadingBtn.setOnClickListener { emit(SimpleEvent.StartLoadingClick) }
 
@@ -55,7 +62,7 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
 
             progressBar.isVisible = state.request == RequestState.Loading
             loadingBtn.isClickable = state.request == RequestState.None
-            loadingBtn.text = when(state.request) {
+            loadingBtn.text = when (state.request) {
                 RequestState.Error -> "Ошибка =("
                 RequestState.Loading -> "Загрузка..."
                 RequestState.None -> "Старт загрузки"
