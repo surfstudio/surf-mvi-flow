@@ -18,8 +18,8 @@ package ru.surfstudio.mvi.flow.app.simple
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import ru.surfstudio.mvi.flow.FlowStateHolder
-import ru.surfstudio.mvi.flow.app.request.RequestState
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import java.io.IOException
 
 class SimpleMiddleware(

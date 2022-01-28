@@ -15,21 +15,11 @@
  */
 package ru.surfstudio.mvi.flow.app.handler
 
-import ru.surfstudio.mvi.flow.FlowEventHub
-import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.flow.app.handler.error.ErrorHandlerImpl
-import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
-import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
+import ru.surfstudio.mvi.core.hub.MutableHub
+import ru.surfstudio.mvi.flow.ImmutableFlowStateHolder
+import ru.surfstudio.mvi.flow.lifecycle.MviViewModel
 
-class HandlerViewModel : MviErrorHandlerViewModel<HandlerState, HandlerEvent>() {
-
-    override val state: FlowState<HandlerState> = FlowState(HandlerState())
-    override val hub: FlowEventHub<HandlerEvent> = FlowEventHub()
-    override val middleware: HandlerMiddleware =
-        HandlerMiddleware(IpNetworkCreator.repository)
-    override val reducer: HandlerReducer = HandlerReducer(ErrorHandlerImpl())
-
-    init {
-        bindFlow()
-    }
-}
+class HandlerViewModel(
+    override val stateHolder: ImmutableFlowStateHolder<HandlerState>,
+    override val hub: MutableHub<HandlerEvent>
+) : MviViewModel<HandlerState, HandlerEvent>()

@@ -21,12 +21,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ru.surfstudio.mvi.flow.app.R
 import ru.surfstudio.mvi.flow.app.handler.mapper.LoadStateType
-import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerAndroidView
+import ru.surfstudio.mvi.flow.lifecycle.MviAndroidView
 
-class HandlerActivity : AppCompatActivity(),
-    MviErrorHandlerAndroidView<HandlerState, HandlerEvent> {
+class HandlerActivity : AppCompatActivity(), MviAndroidView<HandlerState, HandlerEvent> {
 
-    override val viewModel by viewModels<HandlerViewModel>()
+    override val viewModel by viewModels<HandlerViewModel> { HandlerViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
