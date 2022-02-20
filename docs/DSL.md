@@ -35,7 +35,7 @@
             .asRequest(LoadDataEvent())
     }
 ```
-1. **streamMapTo** - трансформация потока событий в другой поток событий. Эта трансформация полезна, когда требуется использовать дополнительные операторы реактивных цепочек filter, debounce, distinctUntilChanged итд.
+1. **streamMapTo** - трансформация потока событий в другой поток событий. Эта трансформация полезна, когда трансормации eventMapTo уже недостаточно и требуется модицицировать флоу событий используя операторы реактивных цепочек. Наприер filter, debounce, distinctUntilChanged и тд.
 ```kotlin
     TextChanged::class streamMapTo { textChangedFlow -> 
         textChangedFlow
