@@ -5,7 +5,7 @@
 - [Типы трансформаций](#типы-трансформаций)
 
 ## Начало работы
-Для того, чтобы начать работать с DSL, необходимо унаследовать Middleware, использующийся в проекте, от [DslFlowMiddleware][DslFlowMiddleware], и переопределить метод `transform(eventStream)` следующим образом:
+Для того, чтобы начать работать с DSL, необходимо унаследовать Middleware, использующийся в проекте, от [DslFlowMiddleware], и переопределить метод `transform(eventStream)` следующим образом:
 ```kotlin
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
