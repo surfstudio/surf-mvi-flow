@@ -20,7 +20,7 @@ dependencies {
 
 ## Documentation
 
-[Документация на русском](docs/README.md)
+[Russian docs](docs/README.md)
 
 ## License
 
