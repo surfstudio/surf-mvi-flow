@@ -18,6 +18,10 @@ dependencies {
 }
 ```
 
+## Documentation
+
+[Russian docs](docs/README.md)
+
 ## License
 
 ```

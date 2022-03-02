@@ -30,7 +30,7 @@ class HandlerMiddleware(
             addAll(
                 // init loading
                 flowOf(HandlerEvent.StartLoading),
-                HandlerEvent.StartLoading::class eventMapTo { loadData() }
+                HandlerEvent.StartLoading::class eventToStream { loadData() }
             )
         }
     }

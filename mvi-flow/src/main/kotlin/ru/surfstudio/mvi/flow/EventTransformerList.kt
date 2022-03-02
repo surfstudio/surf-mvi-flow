@@ -52,7 +52,7 @@ open class EventTransformerList<E : Event>(
      *
      * @param action функция реакции.
      */
-    inline infix fun <reified T : Event> Flow<T>.reactTo(
+    inline infix fun <reified T : Event> Flow<T>.react(
             noinline action: (T) -> Unit
     ) : Flow<T> {
         return filterIsInstance<T>().onEach { action(it) }
@@ -66,10 +66,10 @@ open class EventTransformerList<E : Event>(
      *
      * @param action функция реакции.
      */
-    inline fun <reified T : Event> reactTo(
+    inline fun <reified T : Event> react(
             noinline action: (T) -> Unit
     ): Flow<T> {
-        return eventStream.filterIsInstance<T>().reactTo(action)
+        return eventStream.filterIsInstance<T>().react(action)
     }
 
     /**
@@ -80,10 +80,10 @@ open class EventTransformerList<E : Event>(
      *
      * @param action функция реакции.
      */
-    inline infix fun <reified T> KClass<T>.reactTo(
+    inline infix fun <reified T> KClass<T>.react(
             noinline action: (T) -> Unit
     ): Flow<E> where T: E {
-        return eventStream.filterIsInstance<T>().reactTo(action)
+        return eventStream.filterIsInstance<T>().react(action)
     }
 
     /**
@@ -94,7 +94,7 @@ open class EventTransformerList<E : Event>(
      *
      * @param mapper mapper function.
      */
-    inline infix fun <reified T : Event> Flow<T>.mapTo(
+    inline infix fun <reified T : Event> Flow<T>.eventToEvent(
             noinline mapper: suspend (T) -> E
     ): Flow<E> {
         return map(mapper)
@@ -108,10 +108,10 @@ open class EventTransformerList<E : Event>(
      *
      * @param mapper mapper function.
      */
-    inline fun <reified T : Event> mapTo(
+    inline fun <reified T : Event> eventToEvent(
             noinline mapper: suspend (T) -> E
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>() mapTo mapper
+        return eventStream.filterIsInstance<T>() eventToEvent mapper
     }
 
     /**
@@ -122,10 +122,10 @@ open class EventTransformerList<E : Event>(
      *
      * @param mapper mapper function.
      */
-    inline infix fun <reified T : Event> KClass<T>.mapTo(
+    inline infix fun <reified T : Event> KClass<T>.eventToEvent(
             noinline mapper: suspend (T) -> E
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>().mapTo(mapper)
+        return eventStream.filterIsInstance<T>().eventToEvent(mapper)
     }
 
     /**
@@ -137,7 +137,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     @OptIn(FlowPreview::class)
-    infix fun <T : Event> Flow<T>.eventMap(
+    infix fun <T : Event> Flow<T>.eventToStream(
             mapper: (T) -> Flow<E>
     ): Flow<E> {
         return this.flatMapMerge { mapper(it) }
@@ -151,10 +151,10 @@ open class EventTransformerList<E : Event>(
      *
      * @param mapper mapper function.
      */
-    inline fun <reified T : Event> eventMap(
+    inline fun <reified T : Event> eventToStream(
             noinline mapper: (T) -> Flow<E>
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>().eventMap(mapper)
+        return eventStream.filterIsInstance<T>().eventToStream(mapper)
     }
 
     /**
@@ -165,20 +165,20 @@ open class EventTransformerList<E : Event>(
      *
      * @param mapper mapper function.
      */
-    inline infix fun <reified T : Event> KClass<T>.eventMapTo(
+    inline infix fun <reified T : Event> KClass<T>.eventToStream(
             noinline mapper: (T) -> Flow<E>
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>().eventMap(mapper)
+        return eventStream.filterIsInstance<T>().eventToStream(mapper)
     }
 
     /**
      * Maps [Flow]<[T]> to [Flow]<[E]>.
      *
-     * Can be used when the [eventMap] is not enough, and we should modify source [Flow].
+     * Can be used when the [eventToStream] is not enough, and we should modify source [Flow].
      * For example, when we need to add debounce and distinctUntilChanged on TextChanged event before sending it to network.
      * @param mapper mapper function.
      */
-    infix fun <T : Event> Flow<T>.streamMap(
+    infix fun <T : Event> Flow<T>.streamToStream(
             mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
         return mapper(this)
@@ -187,29 +187,29 @@ open class EventTransformerList<E : Event>(
     /**
      * Maps [Flow]<[T]> to [Flow]<[E]>.
      *
-     * Can be used when the [eventMap] is not enough, and we should modify source [Flow].
+     * Can be used when the [eventToStream] is not enough, and we should modify source [Flow].
      * For example, when we need to add debounce and distinctUntilChanged on TextChanged event before sending it to network.
      *
      * @param mapper mapper function.
      */
-    inline fun <reified T : Event> streamMap(
+    inline fun <reified T : Event> streamToStream(
             noinline mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>().streamMap(mapper)
+        return eventStream.filterIsInstance<T>().streamToStream(mapper)
     }
 
     /**
      * Maps [Flow]<[T]> to [Flow]<[E]>.
      *
-     * Can be used when the [eventMap] is not enough, and we should modify source [Flow].
+     * Can be used when the [eventToStream] is not enough, and we should modify source [Flow].
      * For example, when we need to add debounce and distinctUntilChanged on TextChanged event before sending it to network.
      *
      * @param mapper mapper function.
      */
-    inline infix fun <reified T : Event> KClass<T>.streamMapTo(
+    inline infix fun <reified T : Event> KClass<T>.streamToStream(
             noinline mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
-        return eventStream.filterIsInstance<T>().streamMap(mapper)
+        return eventStream.filterIsInstance<T>().streamToStream(mapper)
     }
 
     /**
