@@ -22,7 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "surf-mvi-flow"
 include(":mvi-core")
-include(":mvi-flow")
-include(":mvi-flow-lifecycle")
 include(":mvi-mappers")
 include(":sample")

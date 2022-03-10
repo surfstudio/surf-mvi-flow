@@ -16,17 +16,17 @@
 package ru.surfstudio.mvi.flow.app.simple
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import ru.surfstudio.mvi.flow.app.R
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
-import ru.surfstudio.mvi.flow.lifecycle.MviAndroidView
+import ru.surfstudio.mvi.lifecycle.MviAndroidView
 
 class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEvent> {
 

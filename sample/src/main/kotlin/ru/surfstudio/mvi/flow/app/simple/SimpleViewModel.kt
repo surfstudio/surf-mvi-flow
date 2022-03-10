@@ -17,7 +17,7 @@ package ru.surfstudio.mvi.flow.app.simple
 
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.flow.lifecycle.MviViewModel
+import ru.surfstudio.mvi.lifecycle.MviViewModel
 
 class SimpleViewModel : MviViewModel<SimpleState, SimpleEvent>() {
 
