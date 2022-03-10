@@ -19,8 +19,5 @@ android {
 }
 
 dependencies {
-    api(project(":mvi-flow-lifecycle"))
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    api(project(":mvi-core"))
 }

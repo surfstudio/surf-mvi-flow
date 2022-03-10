@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.lifecycle
+package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope

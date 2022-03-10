@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.lifecycle
+package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.reducer.Reducer
+import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowBinder
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.flow.DslFlowMiddleware
 
 /**
  * An interface of ViewModel providing implementations of observable
