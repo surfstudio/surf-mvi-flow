@@ -20,11 +20,12 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ru.surfstudio.mvi.flow.app.R
-import ru.surfstudio.mvi.flow.app.handler.mapper.LoadStateType
+import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
+import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerAndroidView
 
 class HandlerActivity : AppCompatActivity(),
-    MviErrorHandlerAndroidView<HandlerState, HandlerEvent> {
+    MviErrorHandlerAndroidView<NetworkState, NetworkEvent> {
 
     override val viewModel by viewModels<HandlerViewModel>()
 
@@ -33,21 +34,13 @@ class HandlerActivity : AppCompatActivity(),
         setContentView(R.layout.activity_handler)
         val contentTv = findViewById<TextView>(R.id.handler_content_tv)
 
-        observeState { state: HandlerState ->
-            contentTv.text = when (state.loadState) {
-                LoadStateType.Empty -> "Empty state"
-                LoadStateType.Error -> "Error"
-                LoadStateType.Main -> "Main loading"
-                LoadStateType.NoInternet -> "No internet"
-                LoadStateType.None -> state.data
-                LoadStateType.SwipeRefreshLoading -> "Swipe refresh"
-                LoadStateType.TransparentLoading -> "Transparent loading"
-            }
+        observeState { state: NetworkState ->
+            contentTv.text = state.loadStateData
         }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        emit(HandlerEvent.OnBackPressed)
+        emit(NetworkEvent.OnBackPressed)
     }
 }

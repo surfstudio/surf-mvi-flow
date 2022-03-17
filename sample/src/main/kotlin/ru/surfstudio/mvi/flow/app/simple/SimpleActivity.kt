@@ -22,8 +22,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import ru.surfstudio.mvi.flow.app.R
+import ru.surfstudio.mvi.flow.app.compose.ComposeScreen
+import ru.surfstudio.mvi.flow.app.compose.theme.TestTheme
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.lifecycle.MviAndroidView
@@ -43,6 +46,12 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
 
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         val loadingBtn = findViewById<Button>(R.id.loading_btn)
+
+        findViewById<ComposeView>(R.id.compose_view).setContent {
+            TestTheme {
+                ComposeScreen()
+            }
+        }
 
         val handlerBtn = findViewById<Button>(R.id.handler_btn)
         handlerBtn.setOnClickListener {
