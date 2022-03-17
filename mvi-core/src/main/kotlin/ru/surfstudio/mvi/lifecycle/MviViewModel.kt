@@ -33,12 +33,8 @@ import ru.surfstudio.mvi.flow.FlowState
 /**
  * An interface of ViewModel providing implementations of observable
  * state and hub of events based on Coroutines Flow
- *
- * @property initialState could be used in @Composable
  */
 abstract class MviViewModel<S : Any, E : Event> : ViewModel(), FlowBinder {
-
-    abstract val initialState: S
 
     abstract val state: FlowState<S>
     abstract val hub: FlowEventHub<E>
@@ -57,7 +53,7 @@ abstract class MviViewModel<S : Any, E : Event> : ViewModel(), FlowBinder {
 infix fun <S : Any, E : Event> MviViewModel<S, E>.renders(
     render: @Composable ComposedViewContext<E>.(S) -> Unit
 ) {
-    val state by state.observeState().collectAsState(initial = initialState)
+    val state by state.observeState().collectAsState(initial = state.currentState)
     val scope = rememberCoroutineScope()
 
     val composedViewContext = ComposedViewContext<E> { event ->
@@ -68,6 +64,7 @@ infix fun <S : Any, E : Event> MviViewModel<S, E>.renders(
     composedViewContext.render(state)
 }
 
+/** Helpful interface for emitting events from @Composable */
 fun interface ComposedViewContext<E : Event> {
     fun emit(event: E)
 }

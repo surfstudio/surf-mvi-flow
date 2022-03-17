@@ -26,8 +26,7 @@ import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
 
 class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
 
-    override val initialState: NetworkState = NetworkState()
-    override val state: FlowState<NetworkState> = FlowState(initialState)
+    override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val hub: FlowEventHub<NetworkEvent> = FlowEventHub()
     override val middleware: ComposeMiddleware =
         ComposeMiddleware(IpNetworkCreator.repository)
