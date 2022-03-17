@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import ru.surfstudio.mvi.flow.app.handler.HandlerEvent.LoadDataRequest
 import ru.surfstudio.mvi.flow.app.network.IpRepository
+import ru.surfstudio.mvi.flow.app.utils.mviFlow
 import ru.surfstudio.mvi.mappers.MapperFlowMiddleware
 
 class HandlerMiddleware(
@@ -36,6 +37,6 @@ class HandlerMiddleware(
     }
 
     private fun loadData(): Flow<HandlerEvent> =
-        repository.getIpCountry()
+        mviFlow { repository.getIpCountry() }
             .asRequestEvent(::LoadDataRequest)
 }
