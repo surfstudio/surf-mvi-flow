@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler.mapper
+package ru.surfstudio.mvi.flow.app.reused.mapper
 
-import ru.surfstudio.mvi.flow.app.handler.error.*
+import ru.surfstudio.mvi.flow.app.reused.error.*
 import ru.surfstudio.mvi.mappers.*
 import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 
@@ -171,7 +171,7 @@ object RequestMappers {
             when {
                 request.isLoading && hasData && isSwr -> LoadStateType.SwipeRefreshLoading
                 request.isLoading && hasData -> LoadStateType.TransparentLoading
-                request.isError && hasData -> LoadStateType.TransparentLoading
+                request.isError && hasData -> LoadStateType.None
                 request.isLoading && !hasData -> LoadStateType.Main
                 request.isError && !hasData -> {
                     if (request.getError() is NoInternetException) {

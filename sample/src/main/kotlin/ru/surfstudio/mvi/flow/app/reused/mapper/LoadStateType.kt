@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler.mapper
+package ru.surfstudio.mvi.flow.app.reused.mapper
 
 import ru.surfstudio.mvi.mappers.Loading
 

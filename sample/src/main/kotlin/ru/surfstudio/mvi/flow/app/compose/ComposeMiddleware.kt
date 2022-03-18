@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler
+package ru.surfstudio.mvi.flow.app.compose
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import ru.surfstudio.mvi.flow.app.network.IpRepository
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent.LoadDataRequest
 import ru.surfstudio.mvi.flow.app.utils.mviFlow
 import ru.surfstudio.mvi.mappers.MapperFlowMiddleware
 
-class HandlerMiddleware(
+class ComposeMiddleware(
     private val repository: IpRepository
 ) : MapperFlowMiddleware<NetworkEvent> {
 
     override fun transform(eventStream: Flow<NetworkEvent>): Flow<NetworkEvent> {
         return eventStream.transformations {
             addAll(
-                // init loading
-                flowOf(NetworkEvent.StartLoading),
                 NetworkEvent.StartLoading::class eventToStream { loadData() }
             )
         }
