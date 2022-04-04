@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler
+package ru.surfstudio.mvi.flow.app.compose
 
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
@@ -24,12 +24,12 @@ import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
 
-class HandlerViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
+class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
 
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val hub: FlowEventHub<NetworkEvent> = FlowEventHub()
-    override val middleware: HandlerMiddleware =
-        HandlerMiddleware(IpNetworkCreator.repository)
+    override val middleware: ComposeMiddleware =
+        ComposeMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl())
 
     init {

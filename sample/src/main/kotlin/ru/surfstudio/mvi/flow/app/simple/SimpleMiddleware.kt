@@ -29,7 +29,12 @@ class SimpleMiddleware(
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleEvent.StartLoadingClick::class filter { state.currentState.request == RequestState.None } streamToStream { requestFlow(it) },
+                SimpleEvent.StartLoadingClick::class
+                        filter { state.currentState.request == RequestState.None }
+                        streamToStream { requestFlow(it) },
+                SimpleEvent.SimpleClick::class react {
+                    println("debug react sample")
+                },
                 SimpleEvent.SimpleClick::class streamToStream { clicks -> clicksFlow(clicks) },
             )
         }
@@ -44,20 +49,20 @@ class SimpleMiddleware(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun requestFlow(flow: Flow<SimpleEvent.StartLoadingClick>): Flow<SimpleEvent.RequestEvent> {
         return flow.flatMapLatest {
-                flow {
-                    delay(3000)
-                    if (System.currentTimeMillis() % 2 == 0L) {
-                        throw IOException()
-                    }
-                    emit(SimpleEvent.RequestEvent(RequestState.Success))
-                }.onStart {
-                    emit(SimpleEvent.RequestEvent(RequestState.Loading))
-                }.catch {
-                    emit(SimpleEvent.RequestEvent(RequestState.Error))
-                }.onCompletion {
-                    delay(2000)
-                    emit(SimpleEvent.RequestEvent(RequestState.None))
+            flow {
+                delay(3000)
+                if (System.currentTimeMillis() % 2 == 0L) {
+                    throw IOException()
                 }
+                emit(SimpleEvent.RequestEvent(RequestState.Success))
+            }.onStart {
+                emit(SimpleEvent.RequestEvent(RequestState.Loading))
+            }.catch {
+                emit(SimpleEvent.RequestEvent(RequestState.Error))
+            }.onCompletion {
+                delay(2000)
+                emit(SimpleEvent.RequestEvent(RequestState.None))
             }
+        }
     }
 }

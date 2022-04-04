@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler
+package ru.surfstudio.mvi.flow.app.reused.error
 
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.mappers.Request
-import ru.surfstudio.mvi.mappers.RequestEvent
+import android.util.Log
+import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 
-sealed class HandlerEvent : Event {
-    object StartLoading : HandlerEvent()
-    object OnBackPressed : HandlerEvent()
+/** Sample error handler. The showing of snackbar could be added here for each error in real app */
+class ErrorHandlerImpl : ErrorHandler {
 
-    data class LoadDataRequest(
-        override val request: Request<String>
-    ) : RequestEvent<String>, HandlerEvent()
+    override fun handleError(e: Throwable) {
+        Log.e("Error", "Sample", e)
+    }
 }
