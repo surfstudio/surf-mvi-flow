@@ -1,40 +1,41 @@
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.TestScope
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.hub.EventHub
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.lifecycle.MVIView
 import ru.surfstudio.mvi.lifecycle.MviViewModel
+import java.lang.NullPointerException
+import kotlin.coroutines.CoroutineContext
 
 class TestView(
     private val scope: CoroutineScope,
+    override val viewModel: MviViewModel<TestState, TestEvent>
 ) : MVIView<TestState, TestEvent> {
-
-    private val testMiddleware = TestMiddleware()
-
-    val eventsMiddlewareCount: Int
-        get() = testMiddleware.eventsCount
-
-    override val viewModel: MviViewModel<TestState, TestEvent> =
-        TestViewModel(scope, testMiddleware)
 
     override val uiScope: CoroutineScope
         get() = scope
 }
 
-class TestViewModel(scope: CoroutineScope, middleware: TestMiddleware) :
-    MviViewModel<TestState, TestEvent>() {
+class TestViewModel(
+    private val testMiddleware: TestMiddleware,
+    private val testReducer: TestReducer,
+    private val testScope: CoroutineScope
+) : MviViewModel<TestState, TestEvent>() {
 
     override val state: FlowState<TestState> = FlowState(TestState())
     override val hub: FlowEventHub<TestEvent> = FlowEventHub()
-    override val reducer: Reducer<TestEvent, TestState> = TestReducer()
-    override val middleware: DslFlowMiddleware<TestEvent> = middleware
+    override val reducer: Reducer<TestEvent, TestState> = testReducer
+    override val middleware: DslFlowMiddleware<TestEvent> = testMiddleware
 
     init {
-        viewModelScope.bind(hub, middleware, state, reducer)
+        testScope.bind(hub, middleware, state, reducer)
     }
 }
 
@@ -44,9 +45,7 @@ sealed class TestEvent : Event {
     data class Data(val value: String) : TestEvent()
 }
 
-data class TestState(
-    val state: String = ""
-)
+data class TestState(val state: String = "")
 
 class TestReducer : Reducer<TestEvent, TestState> {
 

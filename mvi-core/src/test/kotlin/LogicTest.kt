@@ -15,8 +15,7 @@
 */
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
@@ -26,13 +25,13 @@ class LogicTest : BaseFlowTest() {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testEventsPassingMiddleware() = runTest {
-        testView = TestView(this)
+        initEntities(this)
 
-        Assert.assertEquals(0, testView?.eventsMiddlewareCount)
+        Assert.assertEquals(0, testMiddleware?.eventsCount)
 
-        testView?.emit(TestEvent.Ui)
         testView?.emit(TestEvent.Logic)
-        testView?.emit(TestEvent.Data(""))
 
+        advanceUntilIdle()
+        Assert.assertEquals(1, testMiddleware?.eventsCount)
     }
 }

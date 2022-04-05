@@ -17,6 +17,8 @@ package ru.surfstudio.mvi.flow
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.cancel
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.hub.EventHub
 import java.lang.NullPointerException

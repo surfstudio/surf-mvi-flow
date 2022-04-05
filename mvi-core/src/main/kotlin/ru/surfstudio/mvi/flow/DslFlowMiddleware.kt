@@ -30,7 +30,6 @@ interface DslFlowMiddleware<T : Event> : DslMiddleware<Flow<T>, Flow<T>, EventTr
         return EventTransformerList(eventStream)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun combineTransformations(transformations: List<Flow<T>>): Flow<T> {
         return merge(*transformations.toTypedArray())
     }

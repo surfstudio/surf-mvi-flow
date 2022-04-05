@@ -37,10 +37,8 @@ interface FlowBinder {
     ) {
         val eventFlow = eventHub.observe()
             .onEach { event: T ->
-                Log.d(TAG, event.toString())
                 reactor.react(stateHolder, event)
             }.catch {
-                Log.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         launch {
