@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.middleware.Middleware
 import ru.surfstudio.mvi.core.reducer.Reactor
+import java.lang.NullPointerException
 
 /**
  * An object that binds together everything in coroutineScope and logs events
@@ -42,7 +43,7 @@ interface FlowBinder {
                 Log.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
-        this@bind.launch {
+        launch {
             middleware.transform(eventFlow)
                 .collect { transformedEvent: T ->
                     eventHub.emit(transformedEvent)

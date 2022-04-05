@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.hub.EventHub
+import java.lang.NullPointerException
 
 class FlowEventHub<T : Event> : EventHub<T, Flow<T>> {
 

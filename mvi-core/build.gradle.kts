@@ -30,7 +30,7 @@ android {
 
 dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     testApi("junit:junit:4.13.2")
     testApi( "org.mockito.kotlin:mockito-kotlin:4.0.0")
     testApi("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")

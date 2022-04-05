@@ -14,19 +14,25 @@
   limitations under the License.
 */
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
 class LogicTest : BaseFlowTest() {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun testEventsPassingMiddleware() {
-        Assert.assertEquals(0, middleware.eventsCount)
+    fun testEventsPassingMiddleware() = runTest {
+        testView = TestView(this)
+
+        Assert.assertEquals(0, testView?.eventsMiddlewareCount)
 
         testView?.emit(TestEvent.Ui)
         testView?.emit(TestEvent.Logic)
         testView?.emit(TestEvent.Data(""))
 
-        Assert.assertEquals(3, middleware.eventsCount)
     }
 }

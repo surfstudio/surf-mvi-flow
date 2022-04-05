@@ -17,11 +17,9 @@ package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ru.surfstudio.mvi.core.event.Event
+import java.lang.NullPointerException
 
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes
