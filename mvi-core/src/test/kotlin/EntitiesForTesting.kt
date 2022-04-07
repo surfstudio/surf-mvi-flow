@@ -1,22 +1,14 @@
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
-import org.mockito.Mockito
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.hub.EventHub
 import ru.surfstudio.mvi.core.middleware.Middleware
 import ru.surfstudio.mvi.core.reducer.Reactor
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
-import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.lifecycle.MVIView
-import ru.surfstudio.mvi.lifecycle.MviViewModel
-import java.lang.NullPointerException
-import kotlin.coroutines.CoroutineContext
 
 class TestView(
     override val viewModel: TestMviViewModel<TestState, TestEvent>,
@@ -31,7 +23,7 @@ class TestView(
 class TestViewModel(
     testMiddleware: TestMiddleware,
     testReducer: TestReducer,
-    testScope: CoroutineScope
+    testScope: TestScope
 ) : TestMviViewModel<TestState, TestEvent>(testScope) {
 
     override val state: FlowState<TestState> = FlowState(TestState())
@@ -117,7 +109,8 @@ interface TestFlowBinder {
             }.shareIn(this, SharingStarted.Eagerly)
         launch {
             middleware.transform(eventFlow)
-                .safeCollect { transformedEvent: T ->
+                .collect { transformedEvent: T ->
+                    //сюда код не заходит
                     eventHub.emit(transformedEvent)
                 }
         }

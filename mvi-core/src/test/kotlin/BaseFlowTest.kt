@@ -20,6 +20,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 
+@OptIn(ExperimentalCoroutinesApi::class)
 abstract class BaseFlowTest {
 
     protected var testView: TestView? = null
@@ -27,18 +28,15 @@ abstract class BaseFlowTest {
     protected var testReducer: TestReducer? = null
     protected var testViewModel: TestViewModel? = null
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     val coroutineRule = TestCoroutineDispatcherRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    @Before
-    fun onStart() {
+    protected fun initEntities(scope: TestScope) {
         testMiddleware = TestMiddleware()
         testReducer = TestReducer()
         testViewModel =
-            TestViewModel(testMiddleware!!, testReducer!!, coroutineRule.testScope)
-        testView = TestView(testViewModel!!, coroutineRule.testScope)
+            TestViewModel(testMiddleware!!, testReducer!!, scope)
+        testView = TestView(testViewModel!!, scope)
     }
-
 }
