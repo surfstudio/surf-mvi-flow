@@ -52,10 +52,14 @@ open class EventTransformerList<E : Event>(
      *
      * @param action функция реакции.
      */
+    @OptIn(FlowPreview::class)
     inline infix fun <reified T : Event> Flow<T>.react(
-            noinline action: (T) -> Unit
-    ) : Flow<T> {
-        return filterIsInstance<T>().onEach { action(it) }
+        noinline action: (T) -> Unit
+    ): Flow<T> {
+        return flatMapMerge {
+            action(it)
+            emptyFlow()
+        }
     }
 
     /**
@@ -67,7 +71,7 @@ open class EventTransformerList<E : Event>(
      * @param action функция реакции.
      */
     inline fun <reified T : Event> react(
-            noinline action: (T) -> Unit
+        noinline action: (T) -> Unit
     ): Flow<T> {
         return eventStream.filterIsInstance<T>().react(action)
     }
@@ -81,8 +85,8 @@ open class EventTransformerList<E : Event>(
      * @param action функция реакции.
      */
     inline infix fun <reified T> KClass<T>.react(
-            noinline action: (T) -> Unit
-    ): Flow<E> where T: E {
+        noinline action: (T) -> Unit
+    ): Flow<E> where T : E {
         return eventStream.filterIsInstance<T>().react(action)
     }
 
@@ -95,7 +99,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline infix fun <reified T : Event> Flow<T>.eventToEvent(
-            noinline mapper: suspend (T) -> E
+        noinline mapper: suspend (T) -> E
     ): Flow<E> {
         return map(mapper)
     }
@@ -109,7 +113,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline fun <reified T : Event> eventToEvent(
-            noinline mapper: suspend (T) -> E
+        noinline mapper: suspend (T) -> E
     ): Flow<E> {
         return eventStream.filterIsInstance<T>() eventToEvent mapper
     }
@@ -123,7 +127,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline infix fun <reified T : Event> KClass<T>.eventToEvent(
-            noinline mapper: suspend (T) -> E
+        noinline mapper: suspend (T) -> E
     ): Flow<E> {
         return eventStream.filterIsInstance<T>().eventToEvent(mapper)
     }
@@ -138,7 +142,7 @@ open class EventTransformerList<E : Event>(
      */
     @OptIn(FlowPreview::class)
     infix fun <T : Event> Flow<T>.eventToStream(
-            mapper: (T) -> Flow<E>
+        mapper: (T) -> Flow<E>
     ): Flow<E> {
         return this.flatMapMerge { mapper(it) }
     }
@@ -152,7 +156,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline fun <reified T : Event> eventToStream(
-            noinline mapper: (T) -> Flow<E>
+        noinline mapper: (T) -> Flow<E>
     ): Flow<E> {
         return eventStream.filterIsInstance<T>().eventToStream(mapper)
     }
@@ -166,7 +170,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline infix fun <reified T : Event> KClass<T>.eventToStream(
-            noinline mapper: (T) -> Flow<E>
+        noinline mapper: (T) -> Flow<E>
     ): Flow<E> {
         return eventStream.filterIsInstance<T>().eventToStream(mapper)
     }
@@ -179,7 +183,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     infix fun <T : Event> Flow<T>.streamToStream(
-            mapper: (Flow<T>) -> Flow<E>
+        mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
         return mapper(this)
     }
@@ -193,7 +197,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline fun <reified T : Event> streamToStream(
-            noinline mapper: (Flow<T>) -> Flow<E>
+        noinline mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
         return eventStream.filterIsInstance<T>().streamToStream(mapper)
     }
@@ -207,7 +211,7 @@ open class EventTransformerList<E : Event>(
      * @param mapper mapper function.
      */
     inline infix fun <reified T : Event> KClass<T>.streamToStream(
-            noinline mapper: (Flow<T>) -> Flow<E>
+        noinline mapper: (Flow<T>) -> Flow<E>
     ): Flow<E> {
         return eventStream.filterIsInstance<T>().streamToStream(mapper)
     }

@@ -13,30 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.handler
+package ru.surfstudio.mvi.flow.app.reused
 
-import ru.surfstudio.mvi.flow.app.handler.mapper.LoadStateType
-import ru.surfstudio.mvi.flow.app.handler.mapper.RequestMappers
+import ru.surfstudio.mvi.flow.app.reused.mapper.LoadStateType
+import ru.surfstudio.mvi.flow.app.reused.mapper.RequestMappers
 import ru.surfstudio.mvi.mappers.RequestEvent
 import ru.surfstudio.mvi.mappers.RequestMapper
 import ru.surfstudio.mvi.mappers.RequestUi
 import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 import ru.surfstudio.mvi.mappers.handler.ErrorHandlerReducer
 
-data class HandlerState(
+data class NetworkState(
     val dataRequestUi: RequestUi<String> = RequestUi()
 ) {
-    val loadState: LoadStateType = dataRequestUi.load as? LoadStateType ?: LoadStateType.Main
-    val data: String = dataRequestUi.data.orEmpty()
+    private val loadState: LoadStateType = dataRequestUi.load as? LoadStateType ?: LoadStateType.None
+    private val data: String = dataRequestUi.data ?: "Initial"
+
+    val loadStateData: String = when (loadState) {
+        LoadStateType.Empty -> "Empty state"
+        LoadStateType.Error -> "Error"
+        LoadStateType.Main -> "Main loading"
+        LoadStateType.NoInternet -> "No internet"
+        LoadStateType.None -> data
+        LoadStateType.SwipeRefreshLoading -> "Swipe refresh"
+        LoadStateType.TransparentLoading -> "Transparent loading"
+    }
 }
 
-class HandlerReducer(
+class NetworkReducer(
     override val errorHandler: ErrorHandler
-) : ErrorHandlerReducer<HandlerEvent, HandlerState> {
+) : ErrorHandlerReducer<NetworkEvent, NetworkState> {
 
-    override fun reduce(state: HandlerState, event: HandlerEvent): HandlerState {
+    override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
         return when (event) {
-            is HandlerEvent.LoadDataRequest -> state.copy(
+            is NetworkEvent.LoadDataRequest -> state.copy(
                 dataRequestUi = updateRequestUi(event, state.dataRequestUi)
             )
             else -> state

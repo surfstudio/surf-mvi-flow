@@ -15,8 +15,14 @@
  */
 package ru.surfstudio.mvi.lifecycle
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
@@ -39,4 +45,26 @@ abstract class MviViewModel<S : Any, E : Event> : ViewModel(), FlowBinder {
     fun bindFlow() {
         viewModelScope.bind(hub, middleware, state, reducer)
     }
+}
+
+/** Syntax sugar fun for convenient binding in @Composable with MVI */
+@SuppressLint("ComposableNaming")
+@Composable
+infix fun <S : Any, E : Event> MviViewModel<S, E>.renders(
+    render: @Composable ComposedViewContext<E>.(S) -> Unit
+) {
+    val state by state.observeState().collectAsState(initial = state.currentState)
+    val scope = rememberCoroutineScope()
+
+    val composedViewContext = ComposedViewContext<E> { event ->
+        scope.launch {
+            hub.emit(event)
+        }
+    }
+    composedViewContext.render(state)
+}
+
+/** Helpful interface for emitting events from @Composable */
+fun interface ComposedViewContext<E : Event> {
+    fun emit(event: E)
 }
