@@ -14,24 +14,45 @@
   limitations under the License.
 */
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
+import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.reducer.Reducer
+import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.FlowBinder
+import ru.surfstudio.mvi.flow.FlowEventHub
+import ru.surfstudio.mvi.flow.FlowState
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LogicTest : BaseFlowTest() {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testEventsPassingMiddleware() = runTest {
-        initEntities(this)
 
         Assert.assertEquals(0, testMiddleware?.eventsCount)
 
         testView?.emit(TestEvent.Logic)
 
-        advanceUntilIdle()
-        Assert.assertEquals(1, testMiddleware?.eventsCount)
+    }
+
+    @Test
+    fun testEvents() = coroutineRule.testScope.runTest {
+        val flow = flow<Int> {
+            emit(4)
+        }
+
+        var counter = 0
+        flow.collect {
+            counter = 4
+        }
+
+        Assert.assertEquals(4, counter)
     }
 }
+

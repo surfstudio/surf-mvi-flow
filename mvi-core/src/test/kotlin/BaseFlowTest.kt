@@ -28,24 +28,17 @@ abstract class BaseFlowTest {
     protected var testViewModel: TestViewModel? = null
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val testDispatcher = StandardTestDispatcher()
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val testScope = TestScope(testDispatcher)
+    @get:Rule
+    val coroutineRule = TestCoroutineDispatcherRule()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun onStart() {
-        Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
+        testMiddleware = TestMiddleware()
+        testReducer = TestReducer()
+        testViewModel =
+            TestViewModel(testMiddleware!!, testReducer!!, coroutineRule.testScope)
+        testView = TestView(testViewModel!!, coroutineRule.testScope)
     }
 
-
-    @ExperimentalCoroutinesApi
-    @After
-    fun destroy() {
-        Dispatchers.resetMain()
-
-        testMiddleware = null
-        testViewModel = null
-        testView = null
-    }
 }
