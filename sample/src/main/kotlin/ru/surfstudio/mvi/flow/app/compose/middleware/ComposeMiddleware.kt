@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose
+package ru.surfstudio.mvi.flow.app.compose.middleware
 
 import kotlinx.coroutines.flow.Flow
 import ru.surfstudio.mvi.flow.app.network.IpRepository

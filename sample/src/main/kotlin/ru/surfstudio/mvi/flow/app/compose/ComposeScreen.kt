@@ -27,11 +27,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.vm.compose.renders
 
+/**
+ * Example composable functions with viewModel
+ */
 @Composable
 fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
     viewModel renders { state ->
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Compose function with viewModel")
                 Text(text = state.loadStateData)
                 Button(onClick = { emit(NetworkEvent.StartLoading) }) {
                     Text("Start compose loading")
@@ -41,3 +45,19 @@ fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
     }
 }
 
+/**
+ * Example composable functions with viewModel, but without state
+ */
+@Composable
+fun ComposeScreenWithoutState(viewModel: ComposeViewModelWithoutState = viewModel()) {
+    viewModel renders {
+        Surface(modifier = Modifier.fillMaxWidth()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Compose function with viewModel, but without state")
+                Button(onClick = { emit(SimpleComposeEvent.SimpleClickEventEvent) }) {
+                    Text("Click click! See log")
+                }
+            }
+        }
+    }
+}

@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name=".handler.HandlerActivity" />
+        <activity android:name=".compose.SimpleComposeActivity" />
     </application>
 
 </manifest>
