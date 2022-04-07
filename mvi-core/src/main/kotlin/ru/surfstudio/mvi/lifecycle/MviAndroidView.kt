@@ -17,10 +17,7 @@ package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ru.surfstudio.mvi.core.event.Event
 
 /**

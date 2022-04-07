@@ -17,6 +17,8 @@
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -26,6 +28,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.mockito.Mockito
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.reducer.Reducer
@@ -41,14 +44,18 @@ abstract class BaseFlowTest {
 
     lateinit var middleware: TestMiddleware
 
+    //@ExperimentalCoroutinesApi
+    //private val testDispatcher = StandardTestDispatcher()
+
     @ExperimentalCoroutinesApi
-    private val testDispatcher = StandardTestDispatcher()
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @ExperimentalCoroutinesApi
     @Before
     @Throws(Exception::class)
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
+        //Dispatchers.setMain(testDispatcher)
 
         middleware = TestMiddleware()
         testView = TestView(middleware)
@@ -57,8 +64,8 @@ abstract class BaseFlowTest {
     @ExperimentalCoroutinesApi
     @After
     fun destroy() {
-        Dispatchers.resetMain()
-        testDispatcher.cancel()
+        //Dispatchers.resetMain()
+        //testDispatcher.cancel()
 
         testView = null
     }
@@ -83,7 +90,6 @@ class TestReducer : Reducer<TestEvent, TestState> {
         }
     }
 }
-
 
 
 class TestMiddleware : DslFlowMiddleware<TestEvent> {
@@ -113,6 +119,9 @@ class TestViewModel(middleware: TestMiddleware) : MviViewModel<TestState, TestEv
 class TestView(middleware: TestMiddleware) : MviAndroidView<TestState, TestEvent> {
 
     override val viewModel: MviViewModel<TestState, TestEvent> = TestViewModel(middleware)
+
+    // must be mocked for test based on mocked TestScope
+    override val uiScope: CoroutineScope = viewModel.viewModelScope
 
     override fun getLifecycle(): Lifecycle =
         LifecycleRegistry(Mockito.mock(LifecycleOwner::class.java))
