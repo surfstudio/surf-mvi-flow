@@ -50,6 +50,23 @@ interface FlowBinder {
         }
     }
 
+    fun <T : Event> CoroutineScope.bind(
+        eventHub: FlowEventHub<T>,
+        middleware: Middleware<Flow<T>, Flow<T>>,
+    ) {
+        val eventFlow = eventHub.observe()
+            .catch {
+                Log.e(TAG, it.message, it)
+                throw it
+            }.shareIn(this, SharingStarted.Eagerly)
+        this@bind.launch {
+            middleware.transform(eventFlow)
+                .collect { transformedEvent: T ->
+                    eventHub.emit(transformedEvent)
+                }
+        }
+    }
+
     companion object {
         const val TAG = "FlowBinder"
     }

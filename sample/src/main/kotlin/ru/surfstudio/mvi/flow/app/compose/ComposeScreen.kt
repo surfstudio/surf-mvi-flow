@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
-import ru.surfstudio.mvi.lifecycle.renders
+import ru.surfstudio.mvi.vm.compose.renders
 
 @Composable
 fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {

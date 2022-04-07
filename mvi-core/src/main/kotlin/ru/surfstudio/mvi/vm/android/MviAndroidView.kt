@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.lifecycle
+package ru.surfstudio.mvi.vm.android
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.vm.MviViewModel
 
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes

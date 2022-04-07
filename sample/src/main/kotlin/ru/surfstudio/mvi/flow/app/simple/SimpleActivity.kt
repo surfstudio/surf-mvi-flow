@@ -29,7 +29,7 @@ import ru.surfstudio.mvi.flow.app.compose.ComposeScreen
 import ru.surfstudio.mvi.flow.app.compose.theme.TestTheme
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
-import ru.surfstudio.mvi.lifecycle.MviAndroidView
+import ru.surfstudio.mvi.vm.android.MviAndroidView
 
 class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEvent> {
 
