@@ -19,13 +19,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -44,9 +39,6 @@ abstract class BaseFlowTest {
 
     lateinit var middleware: TestMiddleware
 
-    //@ExperimentalCoroutinesApi
-    //private val testDispatcher = StandardTestDispatcher()
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -55,8 +47,6 @@ abstract class BaseFlowTest {
     @Before
     @Throws(Exception::class)
     fun setUp() {
-        //Dispatchers.setMain(testDispatcher)
-
         middleware = TestMiddleware()
         testView = TestView(middleware)
     }
@@ -64,9 +54,6 @@ abstract class BaseFlowTest {
     @ExperimentalCoroutinesApi
     @After
     fun destroy() {
-        //Dispatchers.resetMain()
-        //testDispatcher.cancel()
-
         testView = null
     }
 }
