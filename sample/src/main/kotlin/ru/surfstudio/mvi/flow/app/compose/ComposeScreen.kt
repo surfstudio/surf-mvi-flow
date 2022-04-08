@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.vm.compose.renders
+import ru.surfstudio.mvi.vm.compose.binds
 
 /**
  * Example composable functions with viewModel
@@ -50,7 +51,7 @@ fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
  */
 @Composable
 fun ComposeScreenWithoutState(viewModel: ComposeViewModelWithoutState = viewModel()) {
-    viewModel renders {
+    viewModel binds {
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Compose function with viewModel, but without state")

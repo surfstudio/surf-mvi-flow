@@ -28,21 +28,6 @@ import ru.surfstudio.mvi.vm.MviViewModelWithoutState
 /** Syntax sugar fun for convenient binding in @Composable with MVI */
 @SuppressLint("ComposableNaming")
 @Composable
-infix fun <E : Event> MviViewModelWithoutState<E>.renders(
-    render: @Composable ComposedViewContext<E>.() -> Unit
-) {
-    val scope = rememberCoroutineScope()
-
-    ComposedViewContext<E> { event ->
-        scope.launch {
-            hub.emit(event)
-        }
-    }.render()
-}
-
-/** Syntax sugar fun for convenient binding in @Composable with MVI */
-@SuppressLint("ComposableNaming")
-@Composable
 infix fun <S : Any, E : Event> MviViewModel<S, E>.renders(
     render: @Composable ComposedViewContext<E>.(S) -> Unit
 ) {
