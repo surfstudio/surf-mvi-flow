@@ -23,18 +23,17 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
-import ru.surfstudio.mvi.vm.MviViewModel
 
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes
  */
-interface MviAndroidView<S : Any, E : Event> : MVIStatefulView<S, E>, LifecycleOwner {
+interface MviAndroidView<S : Any, E : Event> : MVIView<S, E>, LifecycleOwner {
 
     override val uiScope: CoroutineScope
         get() = lifecycleScope
 }
 
-interface MVIView<E : Event> {
+interface MVIView<S : Any, E : Event> {
 
     /**
      * Scope to observe on state changes and to emit events
@@ -42,9 +41,9 @@ interface MVIView<E : Event> {
     val uiScope: CoroutineScope
 
     /**
-     * viewModel providing event hub for event emission
+     * viewModel providing event hub for event emission and observable state
      */
-    val viewModel: MviViewModel<E>
+    val viewModel: MviStatefulViewModel<S, E>
 
     /**
      * Emits [event] to a hub which is provided by [viewModel]
@@ -54,14 +53,6 @@ interface MVIView<E : Event> {
             viewModel.hub.emit(event)
         }
     }
-}
-
-interface MVIStatefulView<S : Any, E : Event>: MVIView<E> {
-
-    /**
-     * viewModel providing event hub for event emission and observable state
-     */
-    override val viewModel: MviStatefulViewModel<S, E>
 
     /**
      * Subscribes to state updates with the [collector]
