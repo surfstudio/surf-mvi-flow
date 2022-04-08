@@ -15,7 +15,6 @@
  */
 package ru.surfstudio.mvi.flow.app.handler
 
-import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
@@ -27,7 +26,6 @@ import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
 class HandlerViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
 
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
-    override val hub: FlowEventHub<NetworkEvent> = FlowEventHub()
     override val middleware: HandlerMiddleware =
         HandlerMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl())

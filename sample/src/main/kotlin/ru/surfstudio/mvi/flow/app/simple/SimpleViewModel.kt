@@ -22,7 +22,6 @@ import ru.surfstudio.mvi.lifecycle.MviViewModel
 class SimpleViewModel : MviViewModel<SimpleState, SimpleEvent>() {
 
     override val state: FlowState<SimpleState> = FlowState(SimpleState())
-    override val hub: FlowEventHub<SimpleEvent> = FlowEventHub()
     override val middleware: SimpleMiddleware = SimpleMiddleware(state)
     override val reducer: SimpleReducer = SimpleReducer()
 
