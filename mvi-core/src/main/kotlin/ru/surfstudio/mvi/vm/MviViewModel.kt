@@ -30,8 +30,8 @@ import ru.surfstudio.mvi.flow.FlowState
  */
 abstract class MviViewModelWithoutState<E : Event> : ViewModel(), FlowBinder {
 
-    abstract val hub: FlowEventHub<E>
     abstract val middleware: DslFlowMiddleware<E>
+    open val hub: FlowEventHub<E> = FlowEventHub()
 
     /** Must be called in descendant class `init` */
     open fun bindFlow() {
@@ -43,7 +43,7 @@ abstract class MviViewModelWithoutState<E : Event> : ViewModel(), FlowBinder {
  * An interface of ViewModel providing implementations of observable
  * state and hub of events based on Coroutines Flow
  */
-abstract class MviViewModel<S : Any, E : Event>: MviViewModelWithoutState<E>() {
+abstract class MviViewModel<S : Any, E : Event> : MviViewModelWithoutState<E>() {
 
     abstract val state: FlowState<S>
     abstract val reducer: Reducer<E, S>
