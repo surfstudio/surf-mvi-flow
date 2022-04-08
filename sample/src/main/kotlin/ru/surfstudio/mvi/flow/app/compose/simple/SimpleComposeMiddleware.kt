@@ -22,8 +22,7 @@ import ru.surfstudio.mvi.flow.DslFlowMiddleware
 /**
  * Simple middleware for screen without state
  */
-class SimpleComposeMiddleware(
-) : DslFlowMiddleware<SimpleComposeEvent> {
+class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
 
     override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
         return eventStream.transformations {
