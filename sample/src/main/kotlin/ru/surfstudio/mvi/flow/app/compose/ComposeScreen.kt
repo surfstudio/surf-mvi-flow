@@ -36,7 +36,7 @@ fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
     viewModel renders { state ->
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Compose function with viewModel")
+                Text(text = "Compose function with state")
                 Text(text = state.loadStateData)
                 Button(onClick = { emit(NetworkEvent.StartLoading) }) {
                     Text("Start compose loading")
