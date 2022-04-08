@@ -16,10 +16,10 @@
 package ru.surfstudio.mvi.mappers.handler
 
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.BaseStateFullViewModel
+import ru.surfstudio.mvi.vm.MviStatefulViewModel
 
-/** More complex [BaseStateFullViewModel] implementation which reducer is able to handle errors */
-abstract class MviErrorHandlerViewModel<S : Any, E : Event> : BaseStateFullViewModel<S, E>() {
+/** More complex [MviStatefulViewModel] implementation which reducer is able to handle errors */
+abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviStatefulViewModel<S, E>() {
 
     abstract override val reducer: ErrorHandlerReducer<E, S>
 }
