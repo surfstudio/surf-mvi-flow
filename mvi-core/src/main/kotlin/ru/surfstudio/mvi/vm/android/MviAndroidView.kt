@@ -27,13 +27,13 @@ import ru.surfstudio.mvi.vm.MviStatefulViewModel
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes
  */
-interface MviAndroidView<S : Any, E : Event> : MVIView<S, E>, LifecycleOwner {
+interface MviAndroidView<S : Any, E : Event> : MviView<S, E>, LifecycleOwner {
 
     override val uiScope: CoroutineScope
         get() = lifecycleScope
 }
 
-interface MVIView<S : Any, E : Event> {
+interface MviView<S : Any, E : Event> {
 
     /**
      * Scope to observe on state changes and to emit events
