@@ -15,7 +15,6 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
-import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.vm.BaseStateFullViewModel
 

@@ -30,8 +30,8 @@ import ru.surfstudio.mvi.flow.FlowState
  */
 abstract class BaseViewModel<E : Event> : ViewModel(), FlowBinder {
 
-    abstract val hub: FlowEventHub<E>
     abstract val middleware: DslFlowMiddleware<E>
+    open val hub: FlowEventHub<E> = FlowEventHub()
 
     /** Must be called in descendant class `init` */
     open fun bindFlow() {
