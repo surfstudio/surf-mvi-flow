@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose.middleware
+package ru.surfstudio.mvi.flow.app.compose.simple
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
-import ru.surfstudio.mvi.flow.app.compose.SimpleComposeEvent
 
 /**
  * Simple middleware for screen without state

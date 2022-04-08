@@ -22,12 +22,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import ru.surfstudio.mvi.flow.app.R
-import ru.surfstudio.mvi.flow.app.compose.ComposeScreen
-import ru.surfstudio.mvi.flow.app.compose.SimpleComposeActivity
-import ru.surfstudio.mvi.flow.app.compose.theme.TestTheme
+import ru.surfstudio.mvi.flow.app.compose.PlaceComposeActivity
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.vm.android.MviAndroidView
@@ -54,7 +51,7 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
             startActivity(Intent(this, HandlerActivity::class.java))
         }
         goToComposeBtn.setOnClickListener {
-            startActivity(Intent(this, SimpleComposeActivity::class.java))
+            startActivity(Intent(this, PlaceComposeActivity::class.java))
         }
 
         loadingBtn.setOnClickListener { emit(SimpleEvent.StartLoadingClick) }

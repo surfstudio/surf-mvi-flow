@@ -17,9 +17,9 @@ package ru.surfstudio.mvi.flow.app.simple
 
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.BaseStateFullViewModel
 
-class SimpleViewModel : MviViewModel<SimpleState, SimpleEvent>() {
+class SimpleViewModel : BaseStateFullViewModel<SimpleState, SimpleEvent>() {
 
     override val state: FlowState<SimpleState> = FlowState(SimpleState())
     override val hub: FlowEventHub<SimpleEvent> = FlowEventHub()

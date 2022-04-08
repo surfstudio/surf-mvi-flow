@@ -22,13 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviViewModel
-import ru.surfstudio.mvi.vm.MviViewModelWithoutState
+import ru.surfstudio.mvi.vm.BaseStateFullViewModel
 
 /** Syntax sugar fun for convenient binding in @Composable with MVI */
 @SuppressLint("ComposableNaming")
 @Composable
-infix fun <S : Any, E : Event> MviViewModel<S, E>.renders(
+infix fun <S : Any, E : Event> BaseStateFullViewModel<S, E>.renders(
     render: @Composable ComposedViewContext<E>.(S) -> Unit
 ) {
     val state by state.observeState().collectAsState(initial = state.currentState)

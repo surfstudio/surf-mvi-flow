@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.surfstudio.mvi.flow.app.compose.standard.ComposeScreen
+import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeScreen
 
-class SimpleComposeActivity : ComponentActivity() {
+class PlaceComposeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,7 @@ class SimpleComposeActivity : ComponentActivity() {
             ) {
                 ComposeScreen()
                 Spacer(modifier = Modifier.height(32.dp))
-                ComposeScreenWithoutState()
+                SimpleComposeScreen()
             }
         }
     }

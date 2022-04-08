@@ -20,10 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.BaseStateFullViewModel
 
 /**
  * Android object with lifecycle that can emit events to a screens hub and observe state changes
@@ -44,7 +43,7 @@ interface MVIView<S : Any, E : Event> {
     /**
      * viewModel providing event hub for event emission and observable state
      */
-    val viewModel: MviViewModel<S, E>
+    val viewModel: BaseStateFullViewModel<S, E>
 
     /**
      * Emits [event] to a hub which is provided by [viewModel]

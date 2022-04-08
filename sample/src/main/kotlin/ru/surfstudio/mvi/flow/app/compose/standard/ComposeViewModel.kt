@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose
+package ru.surfstudio.mvi.flow.app.compose.standard
 
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.flow.app.compose.middleware.ComposeMiddleware
-import ru.surfstudio.mvi.flow.app.compose.middleware.SimpleComposeMiddleware
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
-import ru.surfstudio.mvi.vm.MviViewModelWithoutState
 
 class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
 
@@ -34,16 +31,6 @@ class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() 
     override val middleware: ComposeMiddleware =
         ComposeMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl())
-
-    init {
-        bindFlow()
-    }
-}
-
-class ComposeViewModelWithoutState : MviViewModelWithoutState<SimpleComposeEvent>() {
-
-    override val hub: FlowEventHub<SimpleComposeEvent> = FlowEventHub()
-    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
 
     init {
         bindFlow()

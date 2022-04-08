@@ -28,7 +28,7 @@ import ru.surfstudio.mvi.flow.FlowState
  * An interface of ViewModel providing implementations of observable
  * hub of events based on Coroutines Flow
  */
-abstract class MviViewModelWithoutState<E : Event> : ViewModel(), FlowBinder {
+abstract class BaseViewModel<E : Event> : ViewModel(), FlowBinder {
 
     abstract val hub: FlowEventHub<E>
     abstract val middleware: DslFlowMiddleware<E>
@@ -43,11 +43,12 @@ abstract class MviViewModelWithoutState<E : Event> : ViewModel(), FlowBinder {
  * An interface of ViewModel providing implementations of observable
  * state and hub of events based on Coroutines Flow
  */
-abstract class MviViewModel<S : Any, E : Event>: MviViewModelWithoutState<E>() {
+abstract class BaseStateFullViewModel<S : Any, E : Event>: BaseViewModel<E>() {
 
     abstract val state: FlowState<S>
     abstract val reducer: Reducer<E, S>
 
+    /** Must be called in descendant class `init` */
     override fun bindFlow() {
         viewModelScope.bind(hub, middleware, state, reducer)
     }
