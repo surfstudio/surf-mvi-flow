@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.lifecycle
+package ru.surfstudio.mvi.vm.android
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -22,27 +22,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.MviViewModel
 
-/**
- * Android object with lifecycle that can emit events to a screens hub and observe state changes
- */
-interface MviAndroidView<S : Any, E : Event> : MVIView<S, E>, LifecycleOwner {
-
-    override val uiScope: CoroutineScope
-        get() = lifecycleScope
-}
-
-interface MVIView<S : Any, E : Event> {
+interface MviView<E : Event> : LifecycleOwner {
 
     /**
      * Scope to observe on state changes and to emit events
      */
     val uiScope: CoroutineScope
+        get() = lifecycleScope
 
     /**
-     * viewModel providing event hub for event emission and observable state
+     * viewModel providing event hub for event emission
      */
-    val viewModel: MviViewModel<S, E>
+    val viewModel: MviViewModel<E>
 
     /**
      * Emits [event] to a hub which is provided by [viewModel]
@@ -52,6 +46,14 @@ interface MVIView<S : Any, E : Event> {
             viewModel.hub.emit(event)
         }
     }
+}
+
+interface MviStatefulView<S : Any, E : Event> : MviView<E> {
+
+    /**
+     * viewModel providing event hub for event emission and observable state
+     */
+    override val viewModel: MviStatefulViewModel<S, E>
 
     /**
      * Subscribes to state updates with the [collector]

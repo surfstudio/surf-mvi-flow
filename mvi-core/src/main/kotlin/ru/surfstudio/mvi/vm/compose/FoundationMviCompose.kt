@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.vm.compose
 
-import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.core.event.Event
 
-class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
 
-    override val state: FlowState<SimpleState> = FlowState(SimpleState())
-    override val middleware: SimpleMiddleware = SimpleMiddleware(state)
-    override val reducer: SimpleReducer = SimpleReducer()
-
-    init {
-        bindFlow()
-    }
+/** Helpful interface for emitting events from @Composable */
+fun interface ComposedViewContext<E : Event> {
+    fun emit(event: E)
 }

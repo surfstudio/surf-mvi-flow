@@ -13,13 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.mappers.handler
+package ru.surfstudio.mvi.vm.compose
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.MviViewModel
 
-/** More complex [MviStatefulViewModel] implementation which reducer is able to handle errors */
-abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviStatefulViewModel<S, E>() {
+/** Syntax sugar fun for convenient binding in @Composable with MVI */
+@SuppressLint("ComposableNaming")
+@Composable
+infix fun <E : Event> MviViewModel<E>.binds(
+    render: @Composable ComposedViewContext<E>.() -> Unit
+) {
+    val scope = rememberCoroutineScope()
 
-    abstract override val reducer: ErrorHandlerReducer<E, S>
+    ComposedViewContext<E> { event ->
+        scope.launch {
+            hub.emit(event)
+        }
+    }.render()
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose
+package ru.surfstudio.mvi.flow.app.compose.simple
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,20 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
-import ru.surfstudio.mvi.lifecycle.renders
+import ru.surfstudio.mvi.vm.compose.binds
 
+/**
+ * Example composable functions with viewModel, but without state
+ */
 @Composable
-fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
-    viewModel renders { state ->
+fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
+    viewModel binds {
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = state.loadStateData)
-                Button(onClick = { emit(NetworkEvent.StartLoading) }) {
-                    Text("Start compose loading")
+                Text(text = "Compose function with viewModel, but without state")
+                Button(onClick = { emit(SimpleComposeEvent.SimpleClickEventEvent) }) {
+                    Text("Click click! See log")
                 }
             }
         }
     }
 }
-

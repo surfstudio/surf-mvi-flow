@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose
+package ru.surfstudio.mvi.flow.app.compose.standard
 
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl

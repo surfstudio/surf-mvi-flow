@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.flow.app.compose.simple
 
-import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.MviViewModel
 
-class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
+class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>() {
 
-    override val state: FlowState<SimpleState> = FlowState(SimpleState())
-    override val middleware: SimpleMiddleware = SimpleMiddleware(state)
-    override val reducer: SimpleReducer = SimpleReducer()
+    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
 
     init {
         bindFlow()

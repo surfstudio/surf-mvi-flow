@@ -22,16 +22,14 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import ru.surfstudio.mvi.flow.app.R
-import ru.surfstudio.mvi.flow.app.compose.ComposeScreen
-import ru.surfstudio.mvi.flow.app.compose.theme.TestTheme
+import ru.surfstudio.mvi.flow.app.compose.PlaceComposeActivity
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
-import ru.surfstudio.mvi.lifecycle.MviAndroidView
+import ru.surfstudio.mvi.vm.android.MviStatefulView
 
-class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEvent> {
+class SimpleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleEvent> {
 
     override val viewModel by viewModels<SimpleViewModel>()
 
@@ -46,16 +44,14 @@ class SimpleActivity : AppCompatActivity(), MviAndroidView<SimpleState, SimpleEv
 
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         val loadingBtn = findViewById<Button>(R.id.loading_btn)
-
-        findViewById<ComposeView>(R.id.compose_view).setContent {
-            TestTheme {
-                ComposeScreen()
-            }
-        }
+        val goToComposeBtn = findViewById<Button>(R.id.go_to_compose_btn)
 
         val handlerBtn = findViewById<Button>(R.id.handler_btn)
         handlerBtn.setOnClickListener {
             startActivity(Intent(this, HandlerActivity::class.java))
+        }
+        goToComposeBtn.setOnClickListener {
+            startActivity(Intent(this, PlaceComposeActivity::class.java))
         }
 
         loadingBtn.setOnClickListener { emit(SimpleEvent.StartLoadingClick) }
