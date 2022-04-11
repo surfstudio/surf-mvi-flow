@@ -28,4 +28,8 @@ class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
     init {
         bindFlow()
     }
+
+    override fun observeFlowEvents(): Flow<Event> {
+        return hub.observe()
+    }
 }
