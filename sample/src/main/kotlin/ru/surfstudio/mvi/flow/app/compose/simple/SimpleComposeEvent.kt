@@ -16,10 +16,15 @@
 package ru.surfstudio.mvi.flow.app.compose.simple
 
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.event.SingleLiveEvent
 
 /**
  * Event for compose screen without state
  */
 sealed class SimpleComposeEvent : Event {
     object SimpleClickEventEvent : SimpleComposeEvent()
+
+    sealed class SimpleSingleLiveEvent : SimpleComposeEvent(), SingleLiveEvent {
+        object ShowMessage : SimpleSingleLiveEvent()
+    }
 }

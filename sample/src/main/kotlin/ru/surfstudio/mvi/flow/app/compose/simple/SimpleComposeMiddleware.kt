@@ -27,8 +27,9 @@ class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
     override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleComposeEvent.SimpleClickEventEvent::class react {
+                SimpleComposeEvent.SimpleClickEventEvent::class eventToEvent {
                     Log.d("SimpleComposeMiddleware", "ClickBtn")
+                    SimpleComposeEvent.SimpleSingleLiveEvent.ShowMessage
                 }
             )
         }

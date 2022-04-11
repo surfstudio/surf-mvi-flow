@@ -15,22 +15,35 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.simple
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.surfstudio.mvi.vm.compose.binds
+import ru.surfstudio.mvi.vm.compose.bindsSingleLive
 
 /**
  * Example composable functions with viewModel, but without state
  */
 @Composable
 fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
+    val localContext = LocalContext.current
+    viewModel.bindsSingleLive {
+        when (it) {
+            is SimpleComposeEvent.SimpleSingleLiveEvent.ShowMessage -> {
+                Toast.makeText(localContext, "Sample click", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
     viewModel binds {
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

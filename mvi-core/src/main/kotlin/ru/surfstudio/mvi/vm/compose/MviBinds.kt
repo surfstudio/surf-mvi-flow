@@ -18,8 +18,11 @@ package ru.surfstudio.mvi.vm.compose
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.event.SingleLiveEvent
 import ru.surfstudio.mvi.vm.MviViewModel
 
 /** Syntax sugar fun for convenient binding in @Composable with MVI */
@@ -35,4 +38,19 @@ infix fun <E : Event> MviViewModel<E>.binds(
             hub.emit(event)
         }
     }.render()
+}
+
+/** Syntax sugar fun for convenient binding in @Composable with MVI */
+@SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
+@Composable
+fun <E : SingleLiveEvent> SingleLiveEventEmmiter<E>.bindsSingleLive(
+    render: (E) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+
+    scope.launch {
+        observeSingleLiveEvents().onEach {
+            render(it)
+        }.collect()
+    }
 }

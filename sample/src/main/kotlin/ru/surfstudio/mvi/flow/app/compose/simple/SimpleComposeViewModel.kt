@@ -15,9 +15,13 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.simple
 
+import kotlinx.coroutines.flow.Flow
+import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.compose.SingleLiveEventEmmiter
 
-class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>() {
+class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
+    SingleLiveEventEmmiter<SimpleComposeEvent.SimpleSingleLiveEvent> {
 
     override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
 
