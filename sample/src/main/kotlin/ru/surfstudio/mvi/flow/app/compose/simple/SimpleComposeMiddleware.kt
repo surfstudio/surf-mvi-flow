@@ -15,9 +15,9 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.simple
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.*
 
 /**
  * Simple middleware for screen without state
@@ -27,10 +27,8 @@ class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
     override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleComposeEvent.SimpleClickEventEvent::class eventToEvent {
-                    Log.d("SimpleComposeMiddleware", "ClickBtn")
-                    SimpleComposeEvent.SimpleSingleLiveEvent.ShowMessage
-                }
+                SimpleClickEventEvent::class eventToEvent { CommandEvents.ShowMessage },
+                SimpleClickEventEvent::class eventToEvent { CommandEvents.ScrollMemesToBottom }
             )
         }
     }

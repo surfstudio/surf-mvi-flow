@@ -3,13 +3,14 @@ package ru.surfstudio.mvi.vm.compose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.event.SingleLiveEvent
+import ru.surfstudio.mvi.core.event.CommandEvent
+import ru.surfstudio.mvi.flow.FlowEventHub
 
-interface SingleLiveEventEmmiter<E : SingleLiveEvent> {
+interface CommandEventObserver<E : Event, C : CommandEvent> {
 
-    fun observeFlowEvents(): Flow<Event>
+    val hub: FlowEventHub<E>
 
-    fun observeSingleLiveEvents(): Flow<E> {
-        return observeFlowEvents().mapNotNull { it as? E }
+    fun observeCommandEvents(): Flow<C> {
+        return hub.observe().mapNotNull { it as? C }
     }
 }
