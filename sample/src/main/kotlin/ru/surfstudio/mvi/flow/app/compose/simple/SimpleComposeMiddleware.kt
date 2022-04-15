@@ -28,7 +28,6 @@ class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
         return eventStream.transformations {
             addAll(
                 SimpleClickEventEvent::class eventToEvent { CommandEvents.ShowMessage },
-                SimpleClickEventEvent::class eventToEvent { CommandEvents.ScrollMemesToBottom }
             )
         }
     }

@@ -28,7 +28,7 @@ class HandlerViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() 
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val middleware: HandlerMiddleware =
         HandlerMiddleware(IpNetworkCreator.repository)
-    override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl())
+    override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl(), {})
 
     init {
         bindFlow()

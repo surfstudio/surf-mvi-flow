@@ -23,10 +23,8 @@ import ru.surfstudio.mvi.core.event.CommandEvent
  */
 sealed class SimpleComposeEvent : Event {
     object SimpleClickEventEvent : SimpleComposeEvent()
-    object ClickScroll : SimpleComposeEvent()
 
     sealed class CommandEvents : SimpleComposeEvent(), CommandEvent {
         object ShowMessage : CommandEvents()
-        object ScrollMemesToBottom : CommandEvents()
     }
 }

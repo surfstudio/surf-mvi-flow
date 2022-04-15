@@ -36,7 +36,6 @@ private const val simpleListSize = 100000
 @Composable
 fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val listState = rememberLazyListState()
 
     viewModel bindsCommandEvent { singleLiveEvent ->
         launch {
@@ -56,9 +55,7 @@ fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
                 Button(onClick = { emit(SimpleComposeEvent.SimpleClickEventEvent) }) {
                     Text("Click click! Show snack!")
                 }
-                Button(onClick = { emit(SimpleComposeEvent.ClickScroll) }) {
-                    Text("Click click! ScrollToBottom")
-                }
+
             }
         }
     }

@@ -15,6 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.reused
 
+import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.app.reused.mapper.LoadStateType
 import ru.surfstudio.mvi.flow.app.reused.mapper.RequestMappers
 import ru.surfstudio.mvi.mappers.RequestEvent
@@ -22,11 +23,13 @@ import ru.surfstudio.mvi.mappers.RequestMapper
 import ru.surfstudio.mvi.mappers.RequestUi
 import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 import ru.surfstudio.mvi.mappers.handler.ErrorHandlerReducer
+import ru.surfstudio.mvi.vm.compose.CommandEmmiter
 
 data class NetworkState(
     val dataRequestUi: RequestUi<String> = RequestUi()
 ) {
-    private val loadState: LoadStateType = dataRequestUi.load as? LoadStateType ?: LoadStateType.None
+    private val loadState: LoadStateType =
+        dataRequestUi.load as? LoadStateType ?: LoadStateType.None
     private val data: String = dataRequestUi.data ?: "Initial"
 
     val loadStateData: String = when (loadState) {
@@ -41,16 +44,29 @@ data class NetworkState(
 }
 
 class NetworkReducer(
-    override val errorHandler: ErrorHandler
-) : ErrorHandlerReducer<NetworkEvent, NetworkState> {
+    override val errorHandler: ErrorHandler,
+    override val emitCommandCallback: (NetworkEvent.CommandEvents) -> Unit
+) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkEvent.CommandEvents> {
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
         return when (event) {
+            is NetworkEvent.DoNothingAndScrollToBottom -> nothingAndEmitScrollToBottomCommand(
+                state,
+                event
+            )
             is NetworkEvent.LoadDataRequest -> state.copy(
                 dataRequestUi = updateRequestUi(event, state.dataRequestUi)
             )
             else -> state
         }
+    }
+
+    private fun nothingAndEmitScrollToBottomCommand(
+        state: NetworkState,
+        event: NetworkEvent.DoNothingAndScrollToBottom
+    ): NetworkState {
+        emitCommandCallback.invoke(NetworkEvent.CommandEvents.ScrollToBottom)
+        return state
     }
 
     private fun <T : Any> updateRequestUi(
