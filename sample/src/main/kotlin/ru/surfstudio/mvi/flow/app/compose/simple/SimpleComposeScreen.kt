@@ -17,7 +17,6 @@ package ru.surfstudio.mvi.flow.app.compose.simple
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,8 +26,6 @@ import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.vm.compose.binds
 import ru.surfstudio.mvi.vm.compose.bindsCommandEvent
 import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.CommandEvents.*
-
-private const val simpleListSize = 100000
 
 /**
  * Example composable functions with viewModel, but without state

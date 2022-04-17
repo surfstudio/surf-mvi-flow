@@ -34,7 +34,7 @@ class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
         ComposeMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(
         ErrorHandlerImpl(),
-        ::emitScope
+        ::emitInScope
     )
 
     init {
@@ -42,7 +42,7 @@ class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
     }
 
     //TODO вынести в CommandEventObserver наколдовав в генериками
-    override fun emitScope(commandEvent: NetworkEvent.CommandEvents) {
+    override fun emitInScope(commandEvent: NetworkEvent.CommandEvents) {
         viewModelScope.launch {
             hub.emit(commandEvent)
         }

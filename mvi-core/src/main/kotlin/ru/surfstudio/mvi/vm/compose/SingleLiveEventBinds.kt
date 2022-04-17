@@ -12,7 +12,7 @@ interface CommandEventObserver<E : Event, C : CommandEvent> {
 
     val hub: FlowEventHub<E>
 
-    fun emitScope(commandEvent: C) {
+    fun emitInScope(commandEvent: C) {
         //nothing
     }
 
