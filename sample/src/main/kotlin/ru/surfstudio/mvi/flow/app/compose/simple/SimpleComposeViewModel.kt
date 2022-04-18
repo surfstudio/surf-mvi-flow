@@ -16,10 +16,8 @@
 package ru.surfstudio.mvi.flow.app.compose.simple
 
 import ru.surfstudio.mvi.vm.MviViewModel
-import ru.surfstudio.mvi.vm.compose.CommandEventObserver
 
-class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
-    CommandEventObserver<SimpleComposeEvent, SimpleComposeEvent.CommandEvents> {
+class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>() {
 
     override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
 

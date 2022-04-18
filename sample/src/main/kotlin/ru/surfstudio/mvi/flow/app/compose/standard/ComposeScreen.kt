@@ -42,7 +42,7 @@ private const val itemsSize = 10000
 @Composable
 fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
     val listState = rememberLazyListState()
-    viewModel bindsCommandEvent { commandEvents ->
+    viewModel.bindsCommandEvent<NetworkEvent.CommandEvents, NetworkEvent> { commandEvents ->
         launch {
             when (commandEvents) {
                 NetworkEvent.CommandEvents.ScrollToBottom -> {

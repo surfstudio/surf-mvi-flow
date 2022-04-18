@@ -34,7 +34,7 @@ import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.CommandEvent
 fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    viewModel bindsCommandEvent { singleLiveEvent ->
+    viewModel.bindsCommandEvent<SimpleComposeEvent.CommandEvents, SimpleComposeEvent> { singleLiveEvent ->
         launch {
             when (singleLiveEvent) {
                 is ShowMessage -> {

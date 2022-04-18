@@ -15,8 +15,6 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.standard
 
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
@@ -24,10 +22,9 @@ import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
-import ru.surfstudio.mvi.vm.compose.CommandEventObserver
+import ru.surfstudio.mvi.vm.compose.emitInScope
 
-class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
-    CommandEventObserver<NetworkEvent, NetworkEvent.CommandEvents> {
+class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
 
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val middleware: ComposeMiddleware =
@@ -39,12 +36,5 @@ class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
 
     init {
         bindFlow()
-    }
-
-    //TODO вынести в CommandEventObserver наколдовав в генериками
-    override fun emitInScope(commandEvent: NetworkEvent.CommandEvents) {
-        viewModelScope.launch {
-            hub.emit(commandEvent)
-        }
     }
 }
