@@ -23,14 +23,14 @@ import ru.surfstudio.mvi.vm.compose.CommandEmmiter
 /**
  * Simple middleware for screen without state
  */
-class SimpleComposeMiddleware(override val emitCommandCallback: (SimpleCommandEvents) -> Unit) :
+class SimpleComposeMiddleware(override val emitCommand: (SimpleCommandEvents) -> Unit) :
     DslFlowMiddleware<SimpleComposeEvent>,
     CommandEmmiter<SimpleCommandEvents> {
 
     override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleClickEventEvent::class react { emitCommandCallback(SimpleCommandEvents.ShowMessage) },
+                SimpleClickEventEvent::class react { emitCommand(SimpleCommandEvents.ShowMessage) },
             )
         }
     }

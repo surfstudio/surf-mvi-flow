@@ -28,5 +28,5 @@ fun interface ComposedViewContext<E : Event> {
  *  Helpful interface for emitting command event from [Reducer]
  */
 interface CommandEmmiter<C: CommandEvent>  {
-    val emitCommandCallback: (C) -> Unit
+    val emitCommand: (C) -> Unit
 }

@@ -28,7 +28,7 @@ import ru.surfstudio.mvi.vm.compose.CommandEmmiter
 
 class HandlerMiddleware(
     private val repository: IpRepository,
-    override val emitCommandCallback: (NetworkCommandEvents) -> Unit,
+    override val emitCommand: (NetworkCommandEvents) -> Unit,
 ) : MapperFlowMiddleware<NetworkEvent>, CommandEmmiter<NetworkCommandEvents> {
 
     override fun transform(eventStream: Flow<NetworkEvent>): Flow<NetworkEvent> {
@@ -38,7 +38,7 @@ class HandlerMiddleware(
                 flowOf(StartLoading),
                 StartLoading::class eventToStream { loadData() },
                 LoadDataRequest::class filter { !it.isLoading } react {
-                    emitCommandCallback(NetworkCommandEvents.ShowSnackSuccessLoading)
+                    emitCommand(NetworkCommandEvents.ShowSnackSuccessLoading)
                 },
             )
         }

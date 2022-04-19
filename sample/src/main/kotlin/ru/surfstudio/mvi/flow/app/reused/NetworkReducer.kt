@@ -23,7 +23,6 @@ import ru.surfstudio.mvi.mappers.RequestUi
 import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 import ru.surfstudio.mvi.mappers.handler.ErrorHandlerReducer
 import ru.surfstudio.mvi.vm.compose.CommandEmmiter
-import kotlin.reflect.KFunction1
 
 data class NetworkState(
     val dataRequestUi: RequestUi<String> = RequestUi()
@@ -45,7 +44,7 @@ data class NetworkState(
 
 class NetworkReducer(
     override val errorHandler: ErrorHandler,
-    override val emitCommandCallback: (NetworkCommandEvents) -> Unit,
+    override val emitCommand: (NetworkCommandEvents) -> Unit,
 ) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkCommandEvents> {
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
@@ -65,7 +64,7 @@ class NetworkReducer(
         state: NetworkState,
         event: NetworkEvent.DoNothingAndScrollToBottom
     ): NetworkState {
-        emitCommandCallback.invoke(NetworkCommandEvents.ScrollToBottom)
+        emitCommand.invoke(NetworkCommandEvents.ScrollToBottom)
         return state
     }
 
