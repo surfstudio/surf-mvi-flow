@@ -27,7 +27,7 @@ import ru.surfstudio.mvi.vm.MviViewModel
 /**
  * Interface for ViewModel that implements monitoring CommandEvent that arrive at the hub
  */
-interface CommandObserver<E : Event, out C : CommandEvent> {
+interface CommandObserver<E : Event, C : CommandEvent> {
 
     val hub: FlowEventHub<E>
 
