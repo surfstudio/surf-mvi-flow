@@ -32,5 +32,6 @@ sealed class NetworkEvent : Event {
 
     sealed class CommandEvents: NetworkEvent(), CommandEvent {
         object ScrollToBottom: CommandEvents()
+        object ShowSnackSuccessLoading: CommandEvents()
     }
 }

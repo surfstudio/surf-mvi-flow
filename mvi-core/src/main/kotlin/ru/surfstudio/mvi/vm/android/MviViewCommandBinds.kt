@@ -13,37 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.vm.compose
+package ru.surfstudio.mvi.vm.android
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.vm.MviViewModel
 import ru.surfstudio.mvi.vm.android.MviView
+import ru.surfstudio.mvi.vm.compose.CommandObserver
 
-/** Syntactic sugar fun for easy linking in @Composable command events with MVI */
-@SuppressLint("ComposableNaming")
-@Composable
-infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
-    onCommandEventListener: CoroutineScope.(C) -> Unit
-) {
-    val scope = rememberCoroutineScope()
-    bindsCommandEvent(scope = scope, onCommandEventListener = onCommandEventListener)
-}
-
-/** Syntactic sugar fun for easy linking in @Composable command events with MVI */
+/** Syntactic sugar fun for easy linking in [MviView] command events with MVI */
 @SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
-@Composable
-fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
-    scope: CoroutineScope,
+infix fun <C : CommandEvent, E : Event, Vm> Vm.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
-) {
-    scope.launch {
+) where Vm : MviViewModel<E>, Vm : CommandObserver<E, C> {
+    viewModelScope.launch {
         observeCommandEvents().onEach {
             this.onCommandEventListener(it)
         }.collect()
