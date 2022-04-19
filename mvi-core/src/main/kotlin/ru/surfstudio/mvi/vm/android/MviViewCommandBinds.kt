@@ -33,7 +33,7 @@ import ru.surfstudio.mvi.vm.compose.CommandObserver
 @SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
 infix fun <C : CommandEvent, E : Event, Vm> Vm.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
-) where Vm : MviViewModel<E>, Vm : CommandObserver<E, C> {
+) where Vm : MviViewModel<E>, Vm : CommandObserver<C> {
     viewModelScope.launch {
         observeCommandEvents().onEach {
             this.onCommandEventListener(it)

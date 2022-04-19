@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent
+import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvents
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.vm.compose.bindsCommandEvent
 import ru.surfstudio.mvi.vm.compose.renders
@@ -45,7 +46,7 @@ fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
     viewModel bindsCommandEvent { commandEvents ->
         launch {
             when (commandEvents) {
-                NetworkEvent.CommandEvents.ScrollToBottom -> {
+                NetworkCommandEvents.ScrollToBottom -> {
                     listState.scrollToItem(itemsSize - 1)
                 }
             }

@@ -18,16 +18,19 @@ package ru.surfstudio.mvi.flow.app.compose.simple
 import kotlinx.coroutines.flow.Flow
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.*
+import ru.surfstudio.mvi.vm.compose.CommandEmmiter
 
 /**
  * Simple middleware for screen without state
  */
-class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
+class SimpleComposeMiddleware(override val emitCommandCallback: (SimpleCommandEvents) -> Unit) :
+    DslFlowMiddleware<SimpleComposeEvent>,
+    CommandEmmiter<SimpleCommandEvents> {
 
     override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleClickEventEvent::class eventToEvent { CommandEvents.ShowMessage },
+                SimpleClickEventEvent::class react { emitCommandCallback(SimpleCommandEvents.ShowMessage) },
             )
         }
     }

@@ -15,9 +15,11 @@
  */
 package ru.surfstudio.mvi.flow.app.handler
 
+import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
+import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvents
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
@@ -26,11 +28,12 @@ import ru.surfstudio.mvi.vm.compose.CommandObserver
 import ru.surfstudio.mvi.vm.compose.emitCommand
 
 class HandlerViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
-    CommandObserver<NetworkEvent, NetworkEvent.CommandEvents> {
+    CommandObserver<NetworkCommandEvents> {
 
+    override val commandHub: FlowEventHub<NetworkCommandEvents> = FlowEventHub()
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val middleware: HandlerMiddleware =
-        HandlerMiddleware(IpNetworkCreator.repository)
+        HandlerMiddleware(IpNetworkCreator.repository, ::emitCommand)
     override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl(), ::emitCommand)
 
     init {

@@ -45,8 +45,8 @@ data class NetworkState(
 
 class NetworkReducer(
     override val errorHandler: ErrorHandler,
-    override val emitCommandCallback: (NetworkEvent.CommandEvents) -> Unit,
-) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkEvent.CommandEvents> {
+    override val emitCommandCallback: (NetworkCommandEvents) -> Unit,
+) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkCommandEvents> {
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
         return when (event) {
@@ -65,7 +65,7 @@ class NetworkReducer(
         state: NetworkState,
         event: NetworkEvent.DoNothingAndScrollToBottom
     ): NetworkState {
-        emitCommandCallback.invoke(NetworkEvent.CommandEvents.ScrollToBottom)
+        emitCommandCallback.invoke(NetworkCommandEvents.ScrollToBottom)
         return state
     }
 

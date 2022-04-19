@@ -29,9 +29,9 @@ sealed class NetworkEvent : Event {
     ) : RequestEvent<String>, NetworkEvent()
 
     object DoNothingAndScrollToBottom : NetworkEvent()
+}
 
-    sealed class CommandEvents: NetworkEvent(), CommandEvent {
-        object ScrollToBottom: CommandEvents()
-        object ShowSnackSuccessLoading: CommandEvents()
-    }
+sealed class NetworkCommandEvents: CommandEvent {
+    object ScrollToBottom: NetworkCommandEvents()
+    object ShowSnackSuccessLoading: NetworkCommandEvents()
 }

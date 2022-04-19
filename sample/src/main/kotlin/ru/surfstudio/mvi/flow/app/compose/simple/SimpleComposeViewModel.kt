@@ -15,13 +15,16 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.simple
 
+import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.vm.MviViewModel
 import ru.surfstudio.mvi.vm.compose.CommandObserver
+import ru.surfstudio.mvi.vm.compose.emitCommand
 
 class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
-    CommandObserver<SimpleComposeEvent, SimpleComposeEvent.CommandEvents> {
+    CommandObserver<SimpleCommandEvents> {
 
-    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
+    override val commandHub: FlowEventHub<SimpleCommandEvents> = FlowEventHub()
+    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware(::emitCommand)
 
     init {
         bindFlow()

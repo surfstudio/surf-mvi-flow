@@ -29,7 +29,7 @@ import ru.surfstudio.mvi.vm.android.MviView
 /** Syntactic sugar fun for easy linking in @Composable command events with MVI */
 @SuppressLint("ComposableNaming")
 @Composable
-infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
+infix fun <C : CommandEvent> CommandObserver<C>.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -39,7 +39,7 @@ infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
 /** Syntactic sugar fun for easy linking in @Composable command events with MVI */
 @SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
 @Composable
-fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
+fun <C : CommandEvent> CommandObserver<C>.bindsCommandEvent(
     scope: CoroutineScope,
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
