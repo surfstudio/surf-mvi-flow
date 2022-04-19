@@ -22,9 +22,11 @@ import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
+import ru.surfstudio.mvi.vm.compose.CommandObserver
 import ru.surfstudio.mvi.vm.compose.emitInScope
 
-class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>() {
+class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
+    CommandObserver<NetworkEvent, NetworkEvent.CommandEvents> {
 
     override val state: FlowState<NetworkState> = FlowState(NetworkState())
     override val middleware: ComposeMiddleware =

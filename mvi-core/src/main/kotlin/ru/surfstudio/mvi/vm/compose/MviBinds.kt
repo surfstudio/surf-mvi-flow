@@ -40,27 +40,3 @@ infix fun <E : Event> MviViewModel<E>.binds(
         }
     }.render()
 }
-
-/** Syntax sugar fun for convenient binding in @Composable with MVI */
-@SuppressLint("ComposableNaming")
-@Composable
-fun <C : CommandEvent, E : Event> MviViewModel<E>.bindsCommandEvent(
-    onCommandEventListener: CoroutineScope.(C) -> Unit
-) {
-    val scope = rememberCoroutineScope()
-    bindsCommandEvent(scope = scope, onCommandEventListener = onCommandEventListener)
-}
-
-/** Syntax sugar fun for convenient binding in @Composable with MVI */
-@SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
-@Composable
-fun <C : CommandEvent, E : Event> MviViewModel<E>.bindsCommandEvent(
-    scope: CoroutineScope,
-    onCommandEventListener: CoroutineScope.(C) -> Unit
-) {
-    scope.launch {
-        observeCommandEvents<E, C>().onEach {
-            this.onCommandEventListener(it)
-        }.collect()
-    }
-}

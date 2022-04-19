@@ -21,19 +21,26 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.event.CommandEvent
+import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.vm.MviViewModel
 
-fun <E: Event, C: CommandEvent> MviViewModel<E>.observeCommandEvents(): Flow<C> {
-    return hub.observe().mapNotNull { it as? C }
+/**
+ * Interface for ViewModel that implements monitoring CommandEvent that arrive at the hub
+ */
+interface CommandObserver<E : Event, C : CommandEvent> {
+
+    val hub: FlowEventHub<E>
+
+    fun observeCommandEvents(): Flow<C> {
+        return hub.observe().mapNotNull { it as? C }
+    }
 }
 
-fun <E: Event, C: CommandEvent> MviViewModel<E>.emitInScope(commandEvent: C) {
+/**
+ * Emit commandEvent in hub
+ */
+fun <E> MviViewModel<E>.emitInScope(commandEvent: E) where E : Event, E : CommandEvent {
     viewModelScope.launch {
-        //TODO Исправить на что-то адекватное
-        //зачастую гении становятся отвергнутые обществом...
-        val event = commandEvent as? E
-        if (event != null) {
-            hub.emit(event)
-        }
+        hub.emit(commandEvent)
     }
 }
