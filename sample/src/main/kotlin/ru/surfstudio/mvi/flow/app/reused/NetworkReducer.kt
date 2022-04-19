@@ -45,7 +45,7 @@ data class NetworkState(
 
 class NetworkReducer(
     override val errorHandler: ErrorHandler,
-    override val emitCommandCallback: KFunction1<NetworkEvent, Unit>
+    override val emitCommandCallback: (NetworkEvent.CommandEvents) -> Unit,
 ) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkEvent.CommandEvents> {
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {

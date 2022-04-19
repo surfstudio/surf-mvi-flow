@@ -27,10 +27,13 @@ import ru.surfstudio.mvi.vm.MviViewModel
 /**
  * Interface for ViewModel that implements monitoring CommandEvent that arrive at the hub
  */
-interface CommandObserver<E : Event, C : CommandEvent> {
+interface CommandObserver<E : Event, out C : CommandEvent> {
 
     val hub: FlowEventHub<E>
 
+    /**
+     * observe command event for hub
+     */
     fun observeCommandEvents(): Flow<C> {
         return hub.observe().mapNotNull { it as? C }
     }
@@ -39,8 +42,9 @@ interface CommandObserver<E : Event, C : CommandEvent> {
 /**
  * Emit commandEvent in hub
  */
-fun <E> MviViewModel<E>.emitInScope(commandEvent: E) where E : Event, E : CommandEvent {
+fun <E: Event, C: CommandEvent> MviViewModel<E>.emitCommand(commandEvent: C) {
+    val command = commandEvent as? E ?: return
     viewModelScope.launch {
-        hub.emit(commandEvent)
+        hub.emit(command)
     }
 }

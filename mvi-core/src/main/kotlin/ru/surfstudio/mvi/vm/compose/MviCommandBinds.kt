@@ -13,7 +13,7 @@ import ru.surfstudio.mvi.core.event.Event
 /** Syntactic sugar fun for easy linking in @Composable command events with MVI */
 @SuppressLint("ComposableNaming")
 @Composable
-fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
+infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
     val scope = rememberCoroutineScope()

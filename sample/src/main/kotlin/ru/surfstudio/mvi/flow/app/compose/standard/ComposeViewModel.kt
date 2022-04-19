@@ -23,7 +23,7 @@ import ru.surfstudio.mvi.flow.app.reused.NetworkReducer
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerViewModel
 import ru.surfstudio.mvi.vm.compose.CommandObserver
-import ru.surfstudio.mvi.vm.compose.emitInScope
+import ru.surfstudio.mvi.vm.compose.emitCommand
 
 class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
     CommandObserver<NetworkEvent, NetworkEvent.CommandEvents> {
@@ -33,7 +33,7 @@ class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
         ComposeMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(
         ErrorHandlerImpl(),
-        ::emitInScope
+        ::emitCommand
     )
 
     init {

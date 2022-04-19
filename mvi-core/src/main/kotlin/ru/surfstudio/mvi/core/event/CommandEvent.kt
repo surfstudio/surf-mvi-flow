@@ -15,4 +15,7 @@
  */
 package ru.surfstudio.mvi.core.event
 
+/**
+ * Marker interface for the type of event that implements the SingleLiveEvent pattern
+ */
 interface CommandEvent: Event
