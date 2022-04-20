@@ -15,18 +15,22 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
+import androidx.lifecycle.Lifecycle
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.event.LifecycleMviEvent
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 
-sealed class SimpleEvent: Event {
+sealed class SimpleEvent : Event {
 
-    object SimpleClick: SimpleEvent()
+    data class LifecycleMvi(override var event: Lifecycle.Event) : SimpleEvent(), LifecycleMviEvent
+
+    object SimpleClick : SimpleEvent()
     object IncrementClick : SimpleEvent()
     object DecrementClick : SimpleEvent()
 
     object StartLoadingClick : SimpleEvent()
 
-    data class RequestEvent(val request: RequestState): SimpleEvent()
+    data class RequestEvent(val request: RequestState) : SimpleEvent()
 
-    data class TitleUpdate(val title: String): SimpleEvent()
+    data class TitleUpdate(val title: String) : SimpleEvent()
 }

@@ -1,19 +1,19 @@
 package ru.surfstudio.mvi.flow;
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.event.MviLifecycleEvent
-import java.util.logging.Logger
+import ru.surfstudio.mvi.core.event.LifecycleMviEvent
 
 /**
  * Middleware, that reacts on android lifecycle.
  *
- * To receive events, you need EventHub to implement interface [Lifecycle]
+ * To receive events, you need to add event that implements [LifecycleMviEvent]
+ * and for your viewModel implements [MapperLifecycleEvent]
+ * The last step is to call the [bindLifecycleEvent]
+ * for the entity implementing the MviView interface
  */
 interface LifecycleMiddleware<T : Event> : DslFlowMiddleware<T> {
     fun Flow<T>.onCreate() = filterLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -34,5 +34,5 @@ interface LifecycleMiddleware<T : Event> : DslFlowMiddleware<T> {
 }
 
 private fun <T> Flow<T>.filterLifecycleEvent(lifecycleEvent: Lifecycle.Event) = this
-    .filter { it is MviLifecycleEvent && it.event == lifecycleEvent }
+    .filter { it is LifecycleMviEvent && it.event == lifecycleEvent }
     .map { it }

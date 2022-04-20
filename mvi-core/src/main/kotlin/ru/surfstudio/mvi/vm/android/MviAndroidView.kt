@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.event.MviLifecycleEvent
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
 import ru.surfstudio.mvi.vm.MviViewModel
 
@@ -38,14 +37,12 @@ interface MviView<E : Event> : LifecycleOwner {
      */
     val viewModel: MviViewModel<E>
 
-    /**
-     * must called in init
-     */
+    /** must be called for lifecycle events to work */
     fun bindLifecycleEvent() {
+        val mapper = viewModel as? MapperLifecycleEvent<E> ?: return
         lifecycle.addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                val mviLifecycleEvent = MviLifecycleEvent(event) as? E ?: return
-                emit(mviLifecycleEvent)
+                emit(mapper.mapToLifecycleScreenEvent(event))
             }
         })
     }

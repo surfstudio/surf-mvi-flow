@@ -30,12 +30,10 @@ class SimpleMiddleware(
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
-                onStart() react  {
-                    println("OnStart")
-                },
+                onCreate() eventToEvent { SimpleEvent.SimpleClick },
                 SimpleEvent.StartLoadingClick::class
-                        filter { state.currentState.request == RequestState.None }
-                        streamToStream { requestFlow(it) },
+                    filter { state.currentState.request == RequestState.None }
+                    streamToStream { requestFlow(it) },
                 SimpleEvent.SimpleClick::class react {
                     println("debug react sample")
                 },
