@@ -31,5 +31,5 @@ class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>(),
         bindFlow()
     }
 
-    override fun mapToLifecycleScreenEvent(event: Lifecycle.Event) = MviLifecycle(event)
+    override fun mapToLifecycleScreenEvent(event: Lifecycle.Event) = SimpleEvent.MviLifecycle(event)
 }
