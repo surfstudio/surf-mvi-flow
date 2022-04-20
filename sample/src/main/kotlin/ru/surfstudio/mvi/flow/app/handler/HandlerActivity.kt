@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ru.surfstudio.mvi.flow.app.R
+import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerAndroidView
@@ -38,9 +39,16 @@ class HandlerActivity : AppCompatActivity(),
 
 
         viewModel bindsCommandEvent { commandEvents ->
-            if (commandEvents is NetworkEvent.CommandEvents.ShowSnackSuccessLoading) {
-                Toast.makeText(this@HandlerActivity, "Loading is completed", Toast.LENGTH_LONG)
-                    .show()
+            when (commandEvents) {
+                is NetworkCommandEvent.ShowSnackSuccessLoading -> {
+                    Toast.makeText(
+                        this@HandlerActivity,
+                        "Loading is completed",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+                else -> {}
             }
         }
 

@@ -30,7 +30,7 @@ import ru.surfstudio.mvi.vm.android.MviView
 import ru.surfstudio.mvi.vm.compose.CommandObserver
 
 /** Syntactic sugar fun for easy linking in [MviView] command events with MVI */
-@SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
+@SuppressLint("ComposableNaming")
 infix fun <C : CommandEvent, E : Event, Vm> Vm.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) where Vm : MviViewModel<E>, Vm : CommandObserver<E, C> {

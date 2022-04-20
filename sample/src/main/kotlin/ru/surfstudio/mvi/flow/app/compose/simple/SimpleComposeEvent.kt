@@ -23,8 +23,8 @@ import ru.surfstudio.mvi.core.event.CommandEvent
  */
 sealed class SimpleComposeEvent : Event {
     object SimpleClickEventEvent : SimpleComposeEvent()
+}
 
-    sealed class CommandEvents : SimpleComposeEvent(), CommandEvent {
-        object ShowMessage : CommandEvents()
-    }
+sealed class CommandEvents : SimpleComposeEvent(), CommandEvent {
+    object ShowMessage : CommandEvents()
 }

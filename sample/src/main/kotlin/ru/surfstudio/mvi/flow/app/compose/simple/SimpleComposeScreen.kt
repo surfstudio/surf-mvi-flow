@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.vm.compose.binds
 import ru.surfstudio.mvi.vm.compose.bindsCommandEvent
-import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.CommandEvents.*
 
 /**
  * Example composable functions with viewModel, but without state
@@ -37,7 +36,7 @@ fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
     viewModel bindsCommandEvent { singleLiveEvent ->
         launch {
             when (singleLiveEvent) {
-                is ShowMessage -> {
+                is CommandEvents.ShowMessage -> {
                     snackbarHostState.showSnackbar("Good job")
                 }
             }

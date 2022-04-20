@@ -15,18 +15,10 @@
  */
 package ru.surfstudio.mvi.vm.compose
 
-import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
 
 
 /** Helpful interface for emitting events from @Composable */
 fun interface ComposedViewContext<E : Event> {
     fun emit(event: E)
-}
-
-/**
- *  Helpful interface for emitting command event from [Reducer]
- */
-interface CommandEmmiter<C: CommandEvent> {
-    val emitCommand: (C) -> Unit
 }

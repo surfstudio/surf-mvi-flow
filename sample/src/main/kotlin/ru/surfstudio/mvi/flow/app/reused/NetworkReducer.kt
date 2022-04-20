@@ -15,6 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.reused
 
+import ru.surfstudio.mvi.core.reducer.ReducerCommandEmmitter
 import ru.surfstudio.mvi.flow.app.reused.mapper.LoadStateType
 import ru.surfstudio.mvi.flow.app.reused.mapper.RequestMappers
 import ru.surfstudio.mvi.mappers.RequestEvent
@@ -22,7 +23,6 @@ import ru.surfstudio.mvi.mappers.RequestMapper
 import ru.surfstudio.mvi.mappers.RequestUi
 import ru.surfstudio.mvi.mappers.handler.ErrorHandler
 import ru.surfstudio.mvi.mappers.handler.ErrorHandlerReducer
-import ru.surfstudio.mvi.vm.compose.CommandEmmiter
 
 data class NetworkState(
     val dataRequestUi: RequestUi<String> = RequestUi()
@@ -44,8 +44,9 @@ data class NetworkState(
 
 class NetworkReducer(
     override val errorHandler: ErrorHandler,
-    override val emitCommand: (NetworkEvent.CommandEvents) -> Unit,
-) : ErrorHandlerReducer<NetworkEvent, NetworkState>, CommandEmmiter<NetworkEvent.CommandEvents> {
+    override val emitCommand: (NetworkCommandEvent) -> Unit,
+) : ErrorHandlerReducer<NetworkEvent, NetworkState>,
+    ReducerCommandEmmitter<NetworkCommandEvent> {
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
         return when (event) {
@@ -64,7 +65,7 @@ class NetworkReducer(
         state: NetworkState,
         event: NetworkEvent.DoNothingAndScrollToBottom
     ): NetworkState {
-        emitCommand.invoke(NetworkEvent.CommandEvents.ScrollToBottom)
+        emitCommand.invoke(NetworkCommandEvent.ScrollToBottom)
         return state
     }
 
