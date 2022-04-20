@@ -20,15 +20,19 @@ import kotlinx.coroutines.flow.*
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.LifecycleMiddleware
 import java.io.IOException
 
 class SimpleMiddleware(
     private val state: FlowState<SimpleState>
-) : DslFlowMiddleware<SimpleEvent> {
+) : DslFlowMiddleware<SimpleEvent>, LifecycleMiddleware<SimpleEvent> {
 
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
+                onStart() react  {
+                    println("OnStart")
+                },
                 SimpleEvent.StartLoadingClick::class
                         filter { state.currentState.request == RequestState.None }
                         streamToStream { requestFlow(it) },

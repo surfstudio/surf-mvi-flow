@@ -15,13 +15,13 @@
  */
 package ru.surfstudio.mvi.vm.android
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.core.event.MviLifecycleEvent
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
 import ru.surfstudio.mvi.vm.MviViewModel
 
@@ -37,6 +37,18 @@ interface MviView<E : Event> : LifecycleOwner {
      * viewModel providing event hub for event emission
      */
     val viewModel: MviViewModel<E>
+
+    /**
+     * must called in init
+     */
+    fun bindLifecycleEvent() {
+        lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                val mviLifecycleEvent = MviLifecycleEvent(event) as? E ?: return
+                emit(mviLifecycleEvent)
+            }
+        })
+    }
 
     /**
      * Emits [event] to a hub which is provided by [viewModel]
