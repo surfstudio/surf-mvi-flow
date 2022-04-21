@@ -38,11 +38,11 @@ interface MviView<E : Event> : LifecycleOwner {
     val viewModel: MviViewModel<E>
 
     /** must be called for lifecycle events to work */
-    fun bindLifecycleEvent() {
-        val mapper = viewModel as? MapperLifecycleEvent<E> ?: return
+    fun bindLifecycleEvents() {
+        val mapToLifecycleEvent = viewModel.getMapperLifecycleEvent() ?: return
         lifecycle.addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                emit(mapper.mapToLifecycleScreenEvent(event))
+                emit(mapToLifecycleEvent(event))
             }
         })
     }
