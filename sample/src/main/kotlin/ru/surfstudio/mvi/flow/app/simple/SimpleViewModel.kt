@@ -17,8 +17,8 @@ package ru.surfstudio.mvi.flow.app.simple
 
 import androidx.lifecycle.Lifecycle
 import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
-import ru.surfstudio.mvi.vm.android.MapperLifecycleEvent
 
 class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>(),
     MapperLifecycleEvent<SimpleEvent> {

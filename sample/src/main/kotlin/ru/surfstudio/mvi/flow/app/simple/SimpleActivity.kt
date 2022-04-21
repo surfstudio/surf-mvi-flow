@@ -27,6 +27,7 @@ import ru.surfstudio.mvi.flow.app.R
 import ru.surfstudio.mvi.flow.app.compose.PlaceComposeActivity
 import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
+import ru.surfstudio.mvi.lifecycle.bindsLifecycleEvent
 import ru.surfstudio.mvi.vm.android.MviStatefulView
 
 class SimpleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleEvent> {
@@ -36,7 +37,7 @@ class SimpleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple)
-        bindLifecycleEvents()
+        bindsLifecycleEvent()
         val counterTv = findViewById<TextView>(R.id.counter_tv)
         val incrementBtn = findViewById<Button>(R.id.increment_btn)
         val decrementBtn = findViewById<Button>(R.id.decrement_btn)
