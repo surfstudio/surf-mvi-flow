@@ -48,6 +48,5 @@ interface LifecycleMiddleware<T : Event> : DslFlowMiddleware<T> {
     fun EventTransformerList<T>.onAny() = eventStream.onAny()
 }
 
-private fun <T> Flow<T>.filterLifecycleEvent(lifecycleEvent: Lifecycle.Event) = this
-    .filter { it is LifecycleMviEvent && it.event == lifecycleEvent }
-    .map { it }
+private fun <T> Flow<T>.filterLifecycleEvent(lifecycleEvent: Lifecycle.Event) =
+    filter { it is LifecycleMviEvent && it.event == lifecycleEvent }
