@@ -48,4 +48,4 @@ interface LifecycleMiddleware<E : Event> : DslFlowMiddleware<E> {
 }
 
 private fun <T> Flow<T>.filterLifecycleEvent(lifecycleEvent: Lifecycle.Event) =
-    filter { it is MviLifecycleEvent<*> && it.event == lifecycleEvent }
+    filter { it is MviLifecycleEvent && it.event == lifecycleEvent }
