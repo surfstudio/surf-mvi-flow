@@ -51,7 +51,6 @@ fun ComposeScreen(viewModel: ComposeViewModel = viewModel()) {
                 else -> {}
             }
         }
-
     }
     viewModel renders { state ->
         Surface(modifier = Modifier.fillMaxWidth()) {

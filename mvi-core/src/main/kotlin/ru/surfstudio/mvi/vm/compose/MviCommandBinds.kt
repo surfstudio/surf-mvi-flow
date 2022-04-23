@@ -17,6 +17,7 @@ package ru.surfstudio.mvi.vm.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
@@ -33,9 +34,11 @@ infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    scope.launch {
-        observeCommandEvents().onEach {
-            this.onCommandEventListener(it)
-        }.collect()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            observeCommandEvents().onEach {
+                this.onCommandEventListener(it)
+            }.collect()
+        }
     }
 }
