@@ -31,7 +31,6 @@ class SimpleMiddleware(
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
-                onCreate() eventToEvent { SimpleClick },
                 StartLoadingClick::class
                     filter { state.currentState.request == RequestState.None }
                     streamToStream { requestFlow(it) },

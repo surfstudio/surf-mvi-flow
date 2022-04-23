@@ -16,15 +16,10 @@
 package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviViewModel
-import ru.surfstudio.mvi.vm.android.MviView
 
 /**
  * Map [Lifecycle.Event] from lifecycleScope to [MviLifecycleEvent]
  */
-interface MapperLifecycleEvent<E : Event> {
+interface MapperLifecycleEvent<E> {
     fun mapToLifecycleScreenEvent(event: Lifecycle.Event): E
 }
