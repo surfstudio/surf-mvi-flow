@@ -29,7 +29,7 @@ import ru.surfstudio.mvi.vm.MviViewModel
 import ru.surfstudio.mvi.vm.android.MviView
 import ru.surfstudio.mvi.vm.compose.CommandObserver
 
-/** Syntactic sugar fun for easy linking in [MviView] command events with MVI */
+/** Syntactic sugar fun for easy linking command events in [MviView] */
 @SuppressLint("ComposableNaming")
 infix fun <C : CommandEvent, E : Event, Vm> Vm.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
