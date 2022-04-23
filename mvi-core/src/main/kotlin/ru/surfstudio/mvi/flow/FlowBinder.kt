@@ -28,14 +28,14 @@ import ru.surfstudio.mvi.core.reducer.Reactor
  */
 interface FlowBinder {
 
-    fun <T : Event, SH> CoroutineScope.bind(
-        eventHub: FlowEventHub<T>,
-        middleware: Middleware<Flow<T>, Flow<T>>,
+    fun <E : Event, SH> CoroutineScope.bind(
+        eventHub: FlowEventHub<E>,
+        middleware: Middleware<Flow<E>, Flow<E>>,
         stateHolder: SH,
-        reactor: Reactor<T, SH>
+        reactor: Reactor<E, SH>
     ) {
         val eventFlow = eventHub.observe()
-            .onEach { event: T ->
+            .onEach { event: E ->
                 Log.d(TAG, event.toString())
                 reactor.react(stateHolder, event)
             }.catch {
@@ -45,9 +45,9 @@ interface FlowBinder {
         transformEvents(eventHub, middleware, eventFlow)
     }
 
-    fun <T : Event> CoroutineScope.bind(
-        eventHub: FlowEventHub<T>,
-        middleware: Middleware<Flow<T>, Flow<T>>,
+    fun <E : Event> CoroutineScope.bind(
+        eventHub: FlowEventHub<E>,
+        middleware: Middleware<Flow<E>, Flow<E>>,
     ) {
         val eventFlow = eventHub.observe()
             .catch {
@@ -57,14 +57,14 @@ interface FlowBinder {
         transformEvents(eventHub, middleware, eventFlow)
     }
 
-    private fun <T : Event> CoroutineScope.transformEvents(
-        eventHub: FlowEventHub<T>,
-        middleware: Middleware<Flow<T>, Flow<T>>,
-        eventFlow: SharedFlow<T>
+    private fun <E : Event> CoroutineScope.transformEvents(
+        eventHub: FlowEventHub<E>,
+        middleware: Middleware<Flow<E>, Flow<E>>,
+        eventFlow: SharedFlow<E>
     ) {
         launch {
             middleware.transform(eventFlow)
-                .collect { transformedEvent: T ->
+                .collect { transformedEvent: E ->
                     eventHub.emit(transformedEvent)
                 }
         }

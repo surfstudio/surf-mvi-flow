@@ -15,13 +15,10 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
-import androidx.lifecycle.Lifecycle
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
 
-class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>(),
-    MapperLifecycleEvent<SimpleEvent> {
+class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
 
     override val state: FlowState<SimpleState> = FlowState(SimpleState())
     override val middleware: SimpleMiddleware = SimpleMiddleware(state)
@@ -31,5 +28,4 @@ class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>(),
         bindFlow()
     }
 
-    override fun mapToLifecycleScreenEvent(event: Lifecycle.Event) = SimpleEvent.MviLifecycle(event)
 }

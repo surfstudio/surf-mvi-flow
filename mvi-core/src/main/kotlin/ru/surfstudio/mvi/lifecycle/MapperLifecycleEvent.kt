@@ -23,7 +23,7 @@ import ru.surfstudio.mvi.vm.MviViewModel
 import ru.surfstudio.mvi.vm.android.MviView
 
 /**
- * Map [Lifecycle.Event] from lifecycleScope to [LifecycleMviEvent]
+ * Map [Lifecycle.Event] from lifecycleScope to [MviLifecycleEvent]
  */
 interface MapperLifecycleEvent<E : Event> {
     fun mapToLifecycleScreenEvent(event: Lifecycle.Event): E
