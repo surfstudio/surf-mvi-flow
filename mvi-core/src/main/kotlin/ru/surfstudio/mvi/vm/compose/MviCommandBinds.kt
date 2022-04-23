@@ -26,7 +26,7 @@ import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.vm.android.MviView
 
-/** Syntactic sugar fun for easy linking in @Composable command events with MVI */
+/** Syntactic sugar fun for easy linking command events in @Composable */
 @SuppressLint("ComposableNaming", "CoroutineCreationDuringComposition")
 @Composable
 infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
