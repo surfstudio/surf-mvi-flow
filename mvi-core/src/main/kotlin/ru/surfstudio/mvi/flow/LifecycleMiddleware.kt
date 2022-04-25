@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow;
+package ru.surfstudio.mvi.flow
 
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.flow.Flow
