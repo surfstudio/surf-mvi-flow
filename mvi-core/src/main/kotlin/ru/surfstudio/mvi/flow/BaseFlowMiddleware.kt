@@ -19,6 +19,6 @@ import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
 
 /**
- * Base middleware for applications with support for lifecycle events
+ * Base middleware with support of lifecycle events
  */
 interface BaseFlowMiddleware<E : Event> : LifecycleMiddleware<E>, MapperLifecycleEvent<E>
