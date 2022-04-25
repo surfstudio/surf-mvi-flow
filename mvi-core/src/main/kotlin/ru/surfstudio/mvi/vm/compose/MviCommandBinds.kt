@@ -33,12 +33,9 @@ import ru.surfstudio.mvi.vm.android.MviView
 infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
-        scope.launch {
-            observeCommandEvents().onEach {
-                this.onCommandEventListener(it)
-            }.collect()
-        }
+        observeCommandEvents().onEach {
+            onCommandEventListener(it)
+        }.collect()
     }
 }
