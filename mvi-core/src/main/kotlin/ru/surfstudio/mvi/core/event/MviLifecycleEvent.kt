@@ -18,6 +18,6 @@ package ru.surfstudio.mvi.core.event
 import androidx.lifecycle.Lifecycle
 
 /** Screen lifecycle event */
-interface MviLifecycleEvent<E> where E : Event {
+interface MviLifecycleEvent<E: Event> {
     var event: Lifecycle.Event
 }
