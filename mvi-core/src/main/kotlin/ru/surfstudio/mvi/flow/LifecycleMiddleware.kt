@@ -23,11 +23,6 @@ import ru.surfstudio.mvi.core.event.MviLifecycleEvent
 
 /**
  * Middleware, that reacts on android lifecycle.
- *
- * To receive events, you need to add event that implements [MviLifecycleEvent]
- * and for your viewModel implements [MapperLifecycleEvent]
- * The last step is to call the [bindLifecycleEvent]
- * for the entity implementing the MviView interface
  */
 interface LifecycleMiddleware<E : Event> : DslFlowMiddleware<E> {
     fun Flow<E>.onCreate() = filterLifecycleEvent(Lifecycle.Event.ON_CREATE)
