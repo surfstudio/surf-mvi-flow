@@ -23,7 +23,7 @@ import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 sealed class SimpleEvent : Event {
 
     data class LifecycleEvent(override var event: Lifecycle.Event) : SimpleEvent(),
-        MviLifecycleEvent<SimpleEvent>
+        MviLifecycleEvent
 
     object SimpleClick : SimpleEvent()
     object IncrementClick : SimpleEvent()

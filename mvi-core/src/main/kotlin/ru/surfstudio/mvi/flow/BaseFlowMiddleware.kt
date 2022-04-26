@@ -22,7 +22,7 @@ import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
 /**
  * Base middleware with support of lifecycle events
  *
- * To receive events, you need to add event that implements [MviLifecycleEvent]
- * and to call the [bindLifecycleEventfecycleEvent] for the entity implementing the MviView interface
+ * To receive events, you need to add event which implements [MviLifecycleEvent]
+ * and to call [bindsLifecycleEvent] for [MviView] implementation
  */
 interface BaseFlowMiddleware<E : Event> : LifecycleMiddleware<E>, MapperLifecycleEvent<E>
