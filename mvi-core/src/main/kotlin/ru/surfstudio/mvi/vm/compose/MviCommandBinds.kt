@@ -17,26 +17,25 @@ package ru.surfstudio.mvi.vm.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.event.CommandEvent
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.vm.android.MviView
 
-/** Syntax sugar fun for convenient binding in @Composable with MVI */
+/** Syntactic sugar fun for easy linking command events in @Composable */
 @SuppressLint("ComposableNaming")
 @Composable
-infix fun <E : Event> MviViewModel<E>.binds(
-    render: @Composable ComposedViewContext<E>.() -> Unit
+infix fun <C : CommandEvent, E : Event> CommandObserver<E, C>.bindsCommandEvent(
+    onCommandEventListener: CoroutineScope.(C) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-
-    ComposedViewContext<E> { event ->
-        scope.launch {
-            hub.emit(event)
-        }
-    }.render()
+    LaunchedEffect(Unit) {
+        observeCommandEvents().onEach {
+            onCommandEventListener(it)
+        }.collect()
+    }
 }

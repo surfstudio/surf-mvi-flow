@@ -13,17 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.compose.simple
+package ru.surfstudio.mvi.core.event
 
-import ru.surfstudio.mvi.vm.MviViewModel
-import ru.surfstudio.mvi.vm.compose.CommandObserver
-
-class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
-    CommandObserver<SimpleComposeEvent, CommandEvents> {
-
-    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
-
-    init {
-        bindFlow()
-    }
-}
+/**
+ * Marker interface for the type of event that implements the SingleLiveEvent pattern
+ */
+interface CommandEvent: Event

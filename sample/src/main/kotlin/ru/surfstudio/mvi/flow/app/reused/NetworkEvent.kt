@@ -15,6 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.reused
 
+import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.mappers.Request
 import ru.surfstudio.mvi.mappers.RequestEvent
@@ -26,4 +27,11 @@ sealed class NetworkEvent : Event {
     data class LoadDataRequest(
         override val request: Request<String>
     ) : RequestEvent<String>, NetworkEvent()
+
+    object DoNothingAndScrollToBottom : NetworkEvent()
+}
+
+sealed class NetworkCommandEvent: NetworkEvent(), CommandEvent {
+    object ScrollToBottom: NetworkCommandEvent()
+    object ShowSnackSuccessLoading: NetworkCommandEvent()
 }

@@ -18,7 +18,9 @@ package ru.surfstudio.mvi.flow.app.handler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import ru.surfstudio.mvi.flow.app.network.IpRepository
+import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
+import ru.surfstudio.mvi.flow.app.reused.NetworkEvent.*
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent.LoadDataRequest
 import ru.surfstudio.mvi.flow.app.utils.mviFlow
 import ru.surfstudio.mvi.mappers.MapperFlowMiddleware
@@ -31,8 +33,9 @@ class HandlerMiddleware(
         return eventStream.transformations {
             addAll(
                 // init loading
-                flowOf(NetworkEvent.StartLoading),
-                NetworkEvent.StartLoading::class eventToStream { loadData() }
+                flowOf(StartLoading),
+                StartLoading::class eventToStream { loadData() },
+                LoadDataRequest::class filter { !it.isLoading } eventToEvent { NetworkCommandEvent.ShowSnackSuccessLoading },
             )
         }
     }

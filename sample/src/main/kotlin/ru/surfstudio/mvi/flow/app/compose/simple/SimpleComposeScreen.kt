@@ -17,27 +17,41 @@ package ru.surfstudio.mvi.flow.app.compose.simple
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.vm.compose.binds
+import ru.surfstudio.mvi.vm.compose.bindsCommandEvent
 
 /**
  * Example composable functions with viewModel, but without state
  */
 @Composable
 fun SimpleComposeScreen(viewModel: SimpleComposeViewModel = viewModel()) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    viewModel bindsCommandEvent { singleLiveEvent ->
+        launch {
+            when (singleLiveEvent) {
+                is CommandEvents.ShowMessage -> {
+                    snackbarHostState.showSnackbar("Good job")
+                }
+            }
+        }
+    }
+    SnackbarHost(hostState = snackbarHostState)
+
     viewModel binds {
         Surface(modifier = Modifier.fillMaxWidth()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Compose function with viewModel, but without state")
                 Button(onClick = { emit(SimpleComposeEvent.SimpleClickEventEvent) }) {
-                    Text("Click click! See log")
+                    Text("Click click! Show snack!")
                 }
+
             }
         }
     }

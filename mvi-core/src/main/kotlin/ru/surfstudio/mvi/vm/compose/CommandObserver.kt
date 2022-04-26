@@ -15,28 +15,36 @@
  */
 package ru.surfstudio.mvi.vm.compose
 
-import android.annotation.SuppressLint
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.event.CommandEvent
+import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.vm.MviViewModel
 
-/** Syntax sugar fun for convenient binding in @Composable with MVI */
-@SuppressLint("ComposableNaming")
-@Composable
-infix fun <E : Event> MviViewModel<E>.binds(
-    render: @Composable ComposedViewContext<E>.() -> Unit
-) {
-    val scope = rememberCoroutineScope()
+/**
+ * Interface for ViewModel that implements monitoring CommandEvent that arrive at the hub
+ */
+interface CommandObserver<E : Event, C : CommandEvent> {
 
-    ComposedViewContext<E> { event ->
-        scope.launch {
-            hub.emit(event)
-        }
-    }.render()
+    val hub: FlowEventHub<E>
+
+    /**
+     * observe command event for hub
+     */
+    fun observeCommandEvents(): Flow<C> {
+        return hub.observe().mapNotNull { it as? C }
+    }
+}
+
+/**
+ * Emit commandEvent in hub
+ */
+fun <E: Event, C: CommandEvent> MviViewModel<E>.emitCommand(commandEvent: C) {
+    val command = commandEvent as? E ?: return
+    viewModelScope.launch {
+        hub.emit(command)
+    }
 }
