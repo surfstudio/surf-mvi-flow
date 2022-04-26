@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.lifecycle
 
 import androidx.lifecycle.Lifecycle
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.event.MviLifecycleEvent
-import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 
-sealed class SimpleEvent : Event {
-
-    data class LifecycleEvent(override var event: Lifecycle.Event) : SimpleEvent(),
-        MviLifecycleEvent
-
-    object SimpleClick : SimpleEvent()
-    object IncrementClick : SimpleEvent()
-    object DecrementClick : SimpleEvent()
-
-    object StartLoadingClick : SimpleEvent()
-
-    data class RequestEvent(val request: RequestState) : SimpleEvent()
-
-    data class TitleUpdate(val title: String) : SimpleEvent()
+/**
+ * Map [Lifecycle.Event] from lifecycleScope to [MviLifecycleEvent]
+ */
+interface MapperLifecycleEvent<E : Event> {
+    fun mapToLifecycleScreenEvent(event: Lifecycle.Event): E
 }

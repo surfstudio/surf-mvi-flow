@@ -15,54 +15,59 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
+import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import ru.surfstudio.mvi.flow.BaseFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowState
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
-import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.app.simple.SimpleEvent.*
 import java.io.IOException
 
 class SimpleMiddleware(
     private val state: FlowState<SimpleState>
-) : DslFlowMiddleware<SimpleEvent> {
+) : BaseFlowMiddleware<SimpleEvent> {
 
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
-                SimpleEvent.StartLoadingClick::class
-                        filter { state.currentState.request == RequestState.None }
-                        streamToStream { requestFlow(it) },
-                SimpleEvent.SimpleClick::class react {
+                StartLoadingClick::class
+                    filter { state.currentState.request == RequestState.None }
+                    streamToStream { requestFlow(it) },
+                SimpleClick::class react {
                     println("debug react sample")
                 },
-                SimpleEvent.SimpleClick::class streamToStream { clicks -> clicksFlow(clicks) },
+                SimpleClick::class streamToStream { clicks -> clicksFlow(clicks) },
             )
         }
     }
 
+    override fun mapToLifecycleScreenEvent(event: Lifecycle.Event) = LifecycleEvent(event)
+
     @OptIn(FlowPreview::class)
-    private fun clicksFlow(clicks: Flow<SimpleEvent.SimpleClick>): Flow<SimpleEvent.TitleUpdate> {
+    private fun clicksFlow(clicks: Flow<SimpleClick>): Flow<TitleUpdate> {
         return clicks.debounce(1000)
-            .map { SimpleEvent.TitleUpdate("Ты перестал кликать") }
+            .map { TitleUpdate("Ты перестал кликать") }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun requestFlow(flow: Flow<SimpleEvent.StartLoadingClick>): Flow<SimpleEvent.RequestEvent> {
+    private fun requestFlow(flow: Flow<StartLoadingClick>): Flow<RequestEvent> {
         return flow.flatMapLatest {
             flow {
                 delay(3000)
                 if (System.currentTimeMillis() % 2 == 0L) {
                     throw IOException()
                 }
-                emit(SimpleEvent.RequestEvent(RequestState.Success))
+                emit(RequestEvent(RequestState.Success))
             }.onStart {
-                emit(SimpleEvent.RequestEvent(RequestState.Loading))
+                emit(RequestEvent(RequestState.Loading))
             }.catch {
-                emit(SimpleEvent.RequestEvent(RequestState.Error))
+                emit(RequestEvent(RequestState.Error))
             }.onCompletion {
                 delay(2000)
-                emit(SimpleEvent.RequestEvent(RequestState.None))
+                emit(RequestEvent(RequestState.None))
             }
         }
     }
+
 }

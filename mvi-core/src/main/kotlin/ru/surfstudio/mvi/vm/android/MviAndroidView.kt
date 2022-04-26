@@ -15,13 +15,13 @@
  */
 package ru.surfstudio.mvi.vm.android
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
+import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
 import ru.surfstudio.mvi.vm.MviViewModel
 
@@ -39,12 +39,31 @@ interface MviView<E : Event> : LifecycleOwner {
     val viewModel: MviViewModel<E>
 
     /**
+     * Sends lifecycle events to the shared event bus
+     */
+    fun bindsLifecycleEvent() {
+        val mapToLifecycleEvent = getMapperLifecycleEvent() ?: return
+        lifecycle.addObserver(
+            LifecycleEventObserver { _, event ->
+                emit(mapToLifecycleEvent(event))
+            }
+        )
+    }
+
+    /**
      * Emits [event] to a hub which is provided by [viewModel]
      */
     fun emit(event: E) {
         uiScope.launch {
             viewModel.hub.emit(event)
         }
+    }
+
+    /**
+     * Getting the function of converting a lifecycle event into a screen event
+     */
+    private fun getMapperLifecycleEvent(): ((Lifecycle.Event) -> E)? {
+        return (viewModel.middleware as? MapperLifecycleEvent<E>)?.let { it::mapToLifecycleScreenEvent }
     }
 }
 

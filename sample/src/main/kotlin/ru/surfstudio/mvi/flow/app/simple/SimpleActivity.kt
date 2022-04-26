@@ -36,6 +36,7 @@ class SimpleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple)
+        bindsLifecycleEvent()
         val counterTv = findViewById<TextView>(R.id.counter_tv)
         val incrementBtn = findViewById<Button>(R.id.increment_btn)
         val decrementBtn = findViewById<Button>(R.id.decrement_btn)
