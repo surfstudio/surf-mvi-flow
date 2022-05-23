@@ -17,6 +17,7 @@ package ru.surfstudio.mvi.flow
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.hub.EventHub
 
@@ -25,7 +26,7 @@ class FlowEventHub<T : Event> : EventHub<T, Flow<T>> {
     private val hubFlow = MutableSharedFlow<T>()
 
     override fun observe(): Flow<T> {
-        return hubFlow
+        return hubFlow.asSharedFlow()
     }
 
     override suspend fun emit(event: T) {
