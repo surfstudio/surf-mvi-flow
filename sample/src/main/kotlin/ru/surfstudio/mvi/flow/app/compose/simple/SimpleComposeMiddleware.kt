@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow
+package ru.surfstudio.mvi.flow.app.compose.simple
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.hub.EventHub
+import ru.surfstudio.mvi.flow.DslFlowMiddleware
+import ru.surfstudio.mvi.flow.app.compose.simple.SimpleComposeEvent.*
 
-class FlowEventHub<T : Event> : EventHub<T, Flow<T>> {
+/**
+ * Simple middleware for screen without state
+ */
+class SimpleComposeMiddleware : DslFlowMiddleware<SimpleComposeEvent> {
 
-    private val hubFlow = MutableSharedFlow<T>()
-
-    override fun observe(): Flow<T> {
-        return hubFlow.asSharedFlow()
-    }
-
-    override suspend fun emit(event: T) {
-        hubFlow.emit(event)
+    override fun transform(eventStream: Flow<SimpleComposeEvent>): Flow<SimpleComposeEvent> {
+        return eventStream.transformations {
+            addAll(
+                SimpleClickEventEvent::class eventToEvent { CommandEvents.ShowMessage },
+            )
+        }
     }
 }

@@ -17,12 +17,15 @@ package ru.surfstudio.mvi.flow.app.handler
 
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ru.surfstudio.mvi.flow.app.R
+import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
 import ru.surfstudio.mvi.mappers.handler.MviErrorHandlerAndroidView
+import ru.surfstudio.mvi.vm.android.bindsCommandEvent
 
 class HandlerActivity : AppCompatActivity(),
     MviErrorHandlerAndroidView<NetworkState, NetworkEvent> {
@@ -33,6 +36,21 @@ class HandlerActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_handler)
         val contentTv = findViewById<TextView>(R.id.handler_content_tv)
+
+
+        viewModel bindsCommandEvent { commandEvents ->
+            when (commandEvents) {
+                is NetworkCommandEvent.ShowSnackSuccessLoading -> {
+                    Toast.makeText(
+                        this@HandlerActivity,
+                        "Loading is completed",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+                else -> {}
+            }
+        }
 
         observeState { state: NetworkState ->
             contentTv.text = state.loadStateData

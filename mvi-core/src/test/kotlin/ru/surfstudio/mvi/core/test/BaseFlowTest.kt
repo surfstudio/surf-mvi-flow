@@ -19,8 +19,8 @@ import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.lifecycle.MviAndroidView
-import ru.surfstudio.mvi.lifecycle.MviViewModel
+import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.android.MviStatefulView
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class BaseFlowTest {
@@ -88,7 +88,7 @@ class TestMiddleware : DslFlowMiddleware<TestEvent> {
 }
 
 class TestViewModel(middleware: TestMiddleware, reducer: TestReducer) :
-    MviViewModel<TestState, TestEvent>() {
+    MviStatefulViewModel<TestState, TestEvent>() {
 
     override val state: FlowState<TestState> = FlowState(TestState())
     override val hub: FlowEventHub<TestEvent> = FlowEventHub()
@@ -101,9 +101,10 @@ class TestViewModel(middleware: TestMiddleware, reducer: TestReducer) :
 }
 
 class TestView(middleware: TestMiddleware, reducer: TestReducer) :
-    MviAndroidView<TestState, TestEvent> {
+    MviStatefulView<TestState, TestEvent> {
 
-    override val viewModel: MviViewModel<TestState, TestEvent> = TestViewModel(middleware, reducer)
+    override val viewModel: MviStatefulViewModel<TestState, TestEvent> =
+        TestViewModel(middleware, reducer)
 
     // must be mocked for test based on mocked TestScope
     override val uiScope: CoroutineScope = viewModel.viewModelScope

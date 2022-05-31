@@ -15,18 +15,17 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
-import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.lifecycle.MviViewModel
+import ru.surfstudio.mvi.vm.MviStatefulViewModel
 
-class SimpleViewModel : MviViewModel<SimpleState, SimpleEvent>() {
+class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
 
     override val state: FlowState<SimpleState> = FlowState(SimpleState())
-    override val hub: FlowEventHub<SimpleEvent> = FlowEventHub()
     override val middleware: SimpleMiddleware = SimpleMiddleware(state)
     override val reducer: SimpleReducer = SimpleReducer()
 
     init {
         bindFlow()
     }
+
 }

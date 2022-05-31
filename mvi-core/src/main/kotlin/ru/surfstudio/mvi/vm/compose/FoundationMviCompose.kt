@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.mappers.handler
+package ru.surfstudio.mvi.vm.compose
 
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
 
-/** More complex [MviStatefulViewModel] implementation which reducer is able to handle errors */
-abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviStatefulViewModel<S, E>() {
 
-    abstract override val reducer: ErrorHandlerReducer<E, S>
+/** Helpful interface for emitting events from @Composable */
+fun interface ComposedViewContext<E : Event> {
+    fun emit(event: E)
 }

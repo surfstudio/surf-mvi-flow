@@ -8,10 +8,13 @@
     android:orientation="vertical"
     tools:context=".simple.SimpleActivity">
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/compose_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/go_to_compose_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Переход на экран с компоузом"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="40dp" />
 
     <Button
         android:id="@+id/handler_btn"

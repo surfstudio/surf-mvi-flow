@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.mappers.handler
+package ru.surfstudio.mvi.flow.app.compose.simple
 
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.compose.CommandObserver
 
-/** More complex [MviStatefulViewModel] implementation which reducer is able to handle errors */
-abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviStatefulViewModel<S, E>() {
+class SimpleComposeViewModel : MviViewModel<SimpleComposeEvent>(),
+    CommandObserver<SimpleComposeEvent, CommandEvents> {
 
-    abstract override val reducer: ErrorHandlerReducer<E, S>
+    override val middleware: SimpleComposeMiddleware = SimpleComposeMiddleware()
+
+    init {
+        bindFlow()
+    }
 }
