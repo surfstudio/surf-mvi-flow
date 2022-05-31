@@ -38,6 +38,7 @@ abstract class BaseFlowTest {
     var testView: TestView? = null
 
     lateinit var middleware: TestMiddleware
+    lateinit var reducer: TestReducer
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -46,9 +47,10 @@ abstract class BaseFlowTest {
     @ExperimentalCoroutinesApi
     @Before
     @Throws(Exception::class)
-    fun setUp() {
+    open fun setUp() {
         middleware = TestMiddleware()
-        testView = TestView(middleware)
+        reducer = TestReducer()
+        testView = TestView(middleware, reducer)
     }
 
     @ExperimentalCoroutinesApi
@@ -69,8 +71,10 @@ data class TestState(
 )
 
 class TestReducer : Reducer<TestEvent, TestState> {
+    var eventsCount = 0
 
     override fun reduce(state: TestState, event: TestEvent): TestState {
+        eventsCount++
         return when (event) {
             is TestEvent.Data -> state.copy(state = event.value)
             else -> state
@@ -91,11 +95,12 @@ class TestMiddleware : DslFlowMiddleware<TestEvent> {
         }
 }
 
-class TestViewModel(middleware: TestMiddleware) : MviViewModel<TestState, TestEvent>() {
+class TestViewModel(middleware: TestMiddleware, reducer: TestReducer) :
+    MviViewModel<TestState, TestEvent>() {
 
     override val state: FlowState<TestState> = FlowState(TestState())
     override val hub: FlowEventHub<TestEvent> = FlowEventHub()
-    override val reducer: Reducer<TestEvent, TestState> = TestReducer()
+    override val reducer: Reducer<TestEvent, TestState> = reducer
     override val middleware: DslFlowMiddleware<TestEvent> = middleware
 
     init {
@@ -103,9 +108,10 @@ class TestViewModel(middleware: TestMiddleware) : MviViewModel<TestState, TestEv
     }
 }
 
-class TestView(middleware: TestMiddleware) : MviAndroidView<TestState, TestEvent> {
+class TestView(middleware: TestMiddleware, reducer: TestReducer) :
+    MviAndroidView<TestState, TestEvent> {
 
-    override val viewModel: MviViewModel<TestState, TestEvent> = TestViewModel(middleware)
+    override val viewModel: MviViewModel<TestState, TestEvent> = TestViewModel(middleware, reducer)
 
     // must be mocked for test based on mocked TestScope
     override val uiScope: CoroutineScope = viewModel.viewModelScope
