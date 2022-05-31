@@ -36,12 +36,10 @@ interface FlowBinder {
     ) {
         val eventFlow = eventHub.observe()
             .onEach { event: T ->
-                //todo mock for tests
-                //Log.d(TAG, event.toString())
+                Log.d(TAG, event.toString())
                 reactor.react(stateHolder, event)
             }.catch {
-                // todo mock for tests
-                //Log.e(TAG, it.message, it)
+                Log.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         this@bind.launch {

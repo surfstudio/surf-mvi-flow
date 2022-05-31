@@ -6,6 +6,8 @@ plugins {
 }
 
 val composeVersion: String by project
+val kotlinVersion: String by project
+val lifecycleVersion: String by project
 
 val libraryConfig: () -> Unit by project.extra
 val androidConfig: Any.() -> Unit by project.extra
@@ -29,11 +31,12 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinVersion")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     api("androidx.compose.runtime:runtime:$composeVersion")
-    testApi("junit:junit:4.13.2")
-    testApi( "org.mockito.kotlin:mockito-kotlin:4.0.0")
-    testApi("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-inline:4.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
 }
