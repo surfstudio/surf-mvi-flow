@@ -66,4 +66,6 @@ android {
 
 dependencies {
     api(project(":mvi-core"))
+
+    testImplementation("junit:junit:4.13.2")
 }
