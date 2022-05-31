@@ -89,7 +89,6 @@ class TestReducer : Reducer<TestEvent, TestState> {
     }
 }
 
-
 class TestMiddleware : DslFlowMiddleware<TestEvent> {
 
     var eventsCount = 0
@@ -102,8 +101,10 @@ class TestMiddleware : DslFlowMiddleware<TestEvent> {
         }
 }
 
-class TestViewModel(middleware: TestMiddleware, reducer: TestReducer) :
-    MviStatefulViewModel<TestState, TestEvent>() {
+class TestViewModel(
+    middleware: TestMiddleware,
+    reducer: TestReducer
+) : MviStatefulViewModel<TestState, TestEvent>() {
 
     override val state: FlowState<TestState> = FlowState(TestState())
     override val hub: FlowEventHub<TestEvent> = FlowEventHub()
@@ -115,8 +116,10 @@ class TestViewModel(middleware: TestMiddleware, reducer: TestReducer) :
     }
 }
 
-class TestView(middleware: TestMiddleware, reducer: TestReducer) :
-    MviStatefulView<TestState, TestEvent> {
+class TestView(
+    middleware: TestMiddleware,
+    reducer: TestReducer
+) : MviStatefulView<TestState, TestEvent> {
 
     override val viewModel: MviStatefulViewModel<TestState, TestEvent> =
         TestViewModel(middleware, reducer)

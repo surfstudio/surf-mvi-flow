@@ -19,7 +19,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 
@@ -56,7 +55,6 @@ interface MVIErrorHandlerView<S : Any, E : Event> {
     /**
      * Subscribes to state updates with the [collector]
      */
-    @OptIn(InternalCoroutinesApi::class)
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
             viewModel.state
