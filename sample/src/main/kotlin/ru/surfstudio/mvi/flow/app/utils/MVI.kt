@@ -27,17 +27,17 @@ import kotlinx.coroutines.flow.flowOn
  * App util for making a [Flow] from a suspend api fun
  * for usage in middleware for further mapping
  */
-fun <D: Any> mviFlow(
+fun <D : Any> mviFlow(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     value: suspend () -> D
 ): Flow<D> {
     return flow {
         delay(2000L) // test
-        this.emit(value()) // propagate exception in order to handle it further
+        this.emit(value())
     }
         .flowOn(dispatcher)
         .catch {
             println(it)
-            throw it
+            throw it // propagate exception in order to handle it further
         }
 }

@@ -45,10 +45,7 @@ interface MapperFlowMiddleware<T : Event> : DslFlowMiddleware<T> {
      */
     fun <T, E : RequestEvent<T>> Flow<T>.asIoRequestEvent(
         eventFactory: EventFactory<Request<T>, E>
-    ): Flow<E> = this
-        .asRequest()
-        .map { request -> eventFactory(request) }
-        .flowOn(Dispatchers.IO)
+    ): Flow<E> = asRequestEvent(eventFactory).flowOn(Dispatchers.IO)
 
     /**
      * Пропуск дальнейшего проброса события.
