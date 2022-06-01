@@ -69,13 +69,17 @@ android {
     }
 
     kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
     }
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
     api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     api("androidx.compose.runtime:runtime:$composeVersion")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-inline:4.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
 }

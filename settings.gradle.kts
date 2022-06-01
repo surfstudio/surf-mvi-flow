@@ -1,6 +1,4 @@
 pluginManagement {
-    val artifactoryVersion: String by settings
-
     repositories {
         gradlePluginPortal()
         google()
@@ -8,9 +6,9 @@ pluginManagement {
     }
     plugins {
         // https://www.jfrog.com/confluence/display/JFROG/Gradle+Artifactory+Plugin
-        id("com.jfrog.artifactory") version artifactoryVersion
+        id("com.jfrog.artifactory") version "4.28.3"
         // https://github.com/diffplug/spotless
-        id("com.diffplug.spotless") version "6.4.2"
+        id("com.diffplug.spotless") version "6.6.1"
         // https://github.com/ben-manes/gradle-versions-plugin
         id("com.github.ben-manes.versions") version "0.42.0"
     }

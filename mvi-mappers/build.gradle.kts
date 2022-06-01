@@ -60,10 +60,12 @@ android {
     }
 
     kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
     }
 }
 
 dependencies {
     api(project(":mvi-core"))
+
+    testImplementation("junit:junit:4.13.2")
 }

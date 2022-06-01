@@ -15,10 +15,12 @@
  */
 package ru.surfstudio.mvi.vm.android
 
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
@@ -77,7 +79,6 @@ interface MviStatefulView<S : Any, E : Event> : MviView<E> {
     /**
      * Subscribes to state updates with the [collector]
      */
-    @OptIn(InternalCoroutinesApi::class)
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
             viewModel.state

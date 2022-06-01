@@ -24,8 +24,7 @@ import ru.surfstudio.mvi.mappers.handler.ErrorHandler
  *
  * Используется для хранения переиспользуемых мапперов внутри проекта.
  *
- * todo обработка пагинации не реализована
- * */
+ */
 object RequestMappers {
 
     /**

@@ -18,14 +18,11 @@ package ru.surfstudio.mvi.vm.compose
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.android.MviView
 
 /** Syntactic sugar fun for easy linking command events in @Composable */
 @SuppressLint("ComposableNaming")
