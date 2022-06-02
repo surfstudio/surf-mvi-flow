@@ -58,21 +58,21 @@ class ErrorMappingTest {
 
     @Test
     fun testErrorBlocksPassing() {
-        var isSpecificErrorCatched = false
+        var isSpecificErrorCaught = false
         val request = Request.Error<String>(NoSuchElementException())
         val newRequestUi = RequestMapper.builder(request)
             .handleSpecificError(NoSuchElementException::class) { _, _, _ ->
-                isSpecificErrorCatched = true
+                isSpecificErrorCaught = true
                 true
             }
             .handleError { _, _, _ ->
                 // unreachable because of prior specific handler
-                isSpecificErrorCatched = false
+                isSpecificErrorCaught = false
                 true
             }
             .build()
 
         assert(newRequestUi.error is NoSuchElementException)
-        assert(isSpecificErrorCatched)
+        assert(isSpecificErrorCaught)
     }
 }
