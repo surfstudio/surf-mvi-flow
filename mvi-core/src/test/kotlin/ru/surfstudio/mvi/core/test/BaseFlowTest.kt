@@ -59,7 +59,7 @@ abstract class BaseFlowTest {
     }
 
     @After
-    fun destroy() {
+    fun tearDown() {
         testView = null
         mockedLog?.close()
     }
