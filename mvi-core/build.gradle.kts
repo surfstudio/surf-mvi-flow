@@ -38,11 +38,11 @@ artifactory {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 32
         setProperty("archivesBaseName", "mvi-core-$libVersion")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
