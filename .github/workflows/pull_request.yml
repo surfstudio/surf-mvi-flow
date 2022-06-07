@@ -21,7 +21,7 @@ jobs:
     - name: Commit code autoformatting
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: Code formatting [skip ci] [version]
+        commit_message: Code formatting [skip ci]
         
     - name: Build with Gradle
       run: ./gradlew clean assembleRelease
