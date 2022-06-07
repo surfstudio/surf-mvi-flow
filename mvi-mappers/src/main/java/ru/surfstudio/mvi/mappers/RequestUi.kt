@@ -51,4 +51,8 @@ data class RequestUi<T>(
      * */
     val hasError: Boolean get() = error != null
 
+    /**
+     * Флаг, определяющий пустой [RequestUi]
+     */
+    val isEmpty: Boolean get() = data == null && load == null && error == null
 }
