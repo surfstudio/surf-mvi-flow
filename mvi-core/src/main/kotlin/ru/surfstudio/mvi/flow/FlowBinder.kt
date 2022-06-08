@@ -15,13 +15,13 @@
  */
 package ru.surfstudio.mvi.flow
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.middleware.Middleware
 import ru.surfstudio.mvi.core.reducer.Reactor
+import timber.log.Timber
 
 /**
  * An object that binds together everything in coroutineScope and logs events
@@ -36,10 +36,10 @@ interface FlowBinder {
     ) {
         val eventFlow = eventHub.observe()
             .onEach { event: E ->
-                Log.d(TAG, event.toString())
+                Timber.d(TAG, event.toString())
                 reactor.react(stateHolder, event)
             }.catch {
-                Log.e(TAG, it.message, it)
+                Timber.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         transformEvents(eventHub, middleware, eventFlow)
@@ -51,7 +51,7 @@ interface FlowBinder {
     ) {
         val eventFlow = eventHub.observe()
             .catch {
-                Log.e(TAG, it.message, it)
+                Timber.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         transformEvents(eventHub, middleware, eventFlow)

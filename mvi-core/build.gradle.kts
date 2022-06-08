@@ -78,6 +78,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     api("androidx.compose.runtime:runtime:$composeVersion")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:4.6.0")
