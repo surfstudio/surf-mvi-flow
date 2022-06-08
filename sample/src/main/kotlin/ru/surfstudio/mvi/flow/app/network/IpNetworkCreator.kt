@@ -15,7 +15,6 @@
  */
 package ru.surfstudio.mvi.flow.app.network
 
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -23,6 +22,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import timber.log.Timber
 
 /**
  * For MVI testing purpose only. In real project DI could be used
@@ -38,7 +38,7 @@ object IpNetworkCreator {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(
             HttpLoggingInterceptor { message ->
-                Log.d("OkHttp", message)
+                Timber.d("OkHttp", message)
             }.apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }

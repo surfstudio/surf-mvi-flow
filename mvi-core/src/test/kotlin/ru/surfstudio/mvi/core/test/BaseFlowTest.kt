@@ -15,7 +15,6 @@
  */
 package ru.surfstudio.mvi.core.test
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -26,9 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
-import org.mockito.MockedStatic
 import org.mockito.Mockito
-import org.mockito.Mockito.mockStatic
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
@@ -48,11 +45,8 @@ abstract class BaseFlowTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private var mockedLog: MockedStatic<Log>? = null
-
     @Before
     fun setUp() {
-        mockedLog = mockStatic(Log::class.java)
         middleware = TestMiddleware()
         reducer = TestReducer()
         testView = TestView(middleware, reducer)
@@ -61,7 +55,6 @@ abstract class BaseFlowTest {
     @After
     fun tearDown() {
         testView = null
-        mockedLog?.close()
     }
 }
 
