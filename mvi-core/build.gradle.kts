@@ -81,6 +81,6 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:4.6.0")
+    testImplementation("org.mockito:mockito-inline:4.6.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
 }
