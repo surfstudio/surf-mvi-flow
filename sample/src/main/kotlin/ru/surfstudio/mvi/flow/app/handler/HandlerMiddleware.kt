@@ -15,6 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.handler
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import ru.surfstudio.mvi.flow.app.network.IpRepository
@@ -26,21 +27,22 @@ import ru.surfstudio.mvi.flow.app.utils.mviFlow
 import ru.surfstudio.mvi.mappers.MapperFlowMiddleware
 
 class HandlerMiddleware(
-    private val repository: IpRepository
+    private val loadOnStart: Boolean,
+    private val repository: IpRepository,
+    private val dispatcher: CoroutineDispatcher
 ) : MapperFlowMiddleware<NetworkEvent> {
 
     override fun transform(eventStream: Flow<NetworkEvent>): Flow<NetworkEvent> {
         return eventStream.transformations {
             addAll(
-                // init loading
-                flowOf(StartLoading),
+                if (loadOnStart) flowOf(StartLoading) else skip(),
                 StartLoading::class eventToStream { loadData() },
-                LoadDataRequest::class filter { !it.isLoading } eventToEvent { NetworkCommandEvent.ShowSnackSuccessLoading },
+                LoadDataRequest::class filter { it.isSuccess } eventToEvent { NetworkCommandEvent.ShowSnackSuccessLoading },
             )
         }
     }
 
     private fun loadData(): Flow<NetworkEvent> =
-        mviFlow { repository.getIpCountry() }
+        mviFlow(dispatcher) { repository.getIpCountry() }
             .asRequestEvent(::LoadDataRequest)
 }

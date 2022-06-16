@@ -20,7 +20,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Dispatchers
 import ru.surfstudio.mvi.flow.app.R
+import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
 import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkEvent
 import ru.surfstudio.mvi.flow.app.reused.NetworkState
@@ -30,13 +34,24 @@ import ru.surfstudio.mvi.vm.android.bindsCommandEvent
 class HandlerActivity : AppCompatActivity(),
     MviErrorHandlerAndroidView<NetworkState, NetworkEvent> {
 
-    override val viewModel by viewModels<HandlerViewModel>()
+    override val viewModel by viewModels<HandlerViewModel> {
+        // could be hiltViewModel for a real app
+        object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return HandlerViewModel(
+                    loadOnStart = true,
+                    repository = IpNetworkCreator.repository,
+                    dispatcher = Dispatchers.IO
+                ) as T
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_handler)
         val contentTv = findViewById<TextView>(R.id.handler_content_tv)
-
 
         viewModel bindsCommandEvent { commandEvents ->
             when (commandEvents) {
