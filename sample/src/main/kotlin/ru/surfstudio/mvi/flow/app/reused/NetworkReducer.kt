@@ -50,10 +50,7 @@ class NetworkReducer(
 
     override fun reduce(state: NetworkState, event: NetworkEvent): NetworkState {
         return when (event) {
-            is NetworkEvent.DoNothingAndScrollToBottom -> scrollToBottomCommand(
-                state,
-                event
-            )
+            is NetworkEvent.DoNothingAndScrollToBottom -> scrollToBottomCommand(state)
             is NetworkEvent.LoadDataRequest -> state.copy(
                 dataRequestUi = updateRequestUi(event, state.dataRequestUi)
             )
@@ -61,10 +58,7 @@ class NetworkReducer(
         }
     }
 
-    private fun scrollToBottomCommand(
-        state: NetworkState,
-        event: NetworkEvent.DoNothingAndScrollToBottom
-    ): NetworkState {
+    private fun scrollToBottomCommand(state: NetworkState): NetworkState {
         emitCommand.invoke(NetworkCommandEvent.ScrollToBottom)
         return state
     }
