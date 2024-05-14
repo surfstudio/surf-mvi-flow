@@ -34,9 +34,11 @@ class SimpleMiddleware(
                 StartLoadingClick::class
                     filter { state.currentState.request == RequestState.None }
                     streamToStream { requestFlow(it) },
+
                 SimpleClick::class react {
                     println("debug react sample")
                 },
+
                 SimpleClick::class streamToStream { clicks -> clicksFlow(clicks) },
             )
         }
