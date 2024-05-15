@@ -24,8 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.lifecycle.MapperLifecycleEvent
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviNoStateViewModel
 
 interface MviView<E : Event> : LifecycleOwner {
 
@@ -38,7 +38,7 @@ interface MviView<E : Event> : LifecycleOwner {
     /**
      * viewModel providing event hub for event emission
      */
-    val viewModel: MviViewModel<E>
+    val viewModel: MviNoStateViewModel<E>
 
     /**
      * Sends lifecycle events to the shared event bus

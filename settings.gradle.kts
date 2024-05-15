@@ -13,6 +13,7 @@ pluginManagement {
         id("com.diffplug.spotless") version "6.7.2"
         // https://github.com/ben-manes/gradle-versions-plugin
         id("com.github.ben-manes.versions") version "0.42.0"
+        id("org.jetbrains.kotlin.jvm") version "1.6.21"
     }
 }
 
@@ -28,3 +29,4 @@ rootProject.name = "surf-mvi-flow"
 include(":mvi-core")
 include(":mvi-mappers")
 include(":sample")
+include(":mvi-base")

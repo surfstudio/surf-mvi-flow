@@ -20,12 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviNoStateViewModel
 
 /** Syntax sugar fun for convenient binding in @Composable with MVI */
 @SuppressLint("ComposableNaming")
 @Composable
-infix fun <E : Event> MviViewModel<E>.binds(
+infix fun <E : Event> MviNoStateViewModel<E>.binds(
     render: @Composable ComposedViewContext<E>.() -> Unit
 ) {
     val scope = rememberCoroutineScope()

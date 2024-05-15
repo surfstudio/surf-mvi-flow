@@ -22,7 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviStatefulViewModel
 
 /** Syntax sugar fun for convenient binding in @Composable with MVI */
 @SuppressLint("ComposableNaming")

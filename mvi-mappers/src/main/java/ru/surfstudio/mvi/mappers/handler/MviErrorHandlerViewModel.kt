@@ -16,7 +16,7 @@
 package ru.surfstudio.mvi.mappers.handler
 
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviStatefulViewModel
 
 /** More complex [MviStatefulViewModel] implementation which reducer is able to handle errors */
 abstract class MviErrorHandlerViewModel<S : Any, E : Event> : MviStatefulViewModel<S, E>() {

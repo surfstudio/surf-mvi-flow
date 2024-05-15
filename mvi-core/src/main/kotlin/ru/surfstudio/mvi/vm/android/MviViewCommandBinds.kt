@@ -23,14 +23,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.vm.MviViewModel
 import ru.surfstudio.mvi.vm.compose.CommandObserver
+import ru.surfstudio.mvi.vm.viewmodel.MviNoStateViewModel
 
 /** Syntactic sugar fun for easy linking command events in [MviView] */
 @SuppressLint("ComposableNaming")
 infix fun <C : CommandEvent, E : Event, Vm> Vm.bindsCommandEvent(
     onCommandEventListener: CoroutineScope.(C) -> Unit
-) where Vm : MviViewModel<E>, Vm : CommandObserver<E, C> {
+) where Vm : MviNoStateViewModel<E>, Vm : CommandObserver<E, C> {
     viewModelScope.launch {
         observeCommandEvents().onEach {
             this.onCommandEventListener(it)

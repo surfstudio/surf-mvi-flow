@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.event.CommandEvent
 import ru.surfstudio.mvi.flow.FlowEventHub
-import ru.surfstudio.mvi.vm.MviViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviNoStateViewModel
 
 /**
  * Interface for ViewModel that implements monitoring CommandEvent that arrive at the hub
@@ -42,7 +42,7 @@ interface CommandObserver<E : Event, C : CommandEvent> {
 /**
  * Emit commandEvent in hub
  */
-fun <E: Event, C: CommandEvent> MviViewModel<E>.emitCommand(commandEvent: C) {
+fun <E: Event, C: CommandEvent> MviNoStateViewModel<E>.emitCommand(commandEvent: C) {
     val command = commandEvent as? E ?: return
     viewModelScope.launch {
         hub.emit(command)

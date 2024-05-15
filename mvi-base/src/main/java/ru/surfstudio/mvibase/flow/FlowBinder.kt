@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.middleware.Middleware
 import ru.surfstudio.mvi.core.reducer.Reactor
-import timber.log.Timber
+import ru.surfstudio.mvibase.logging.MviLogger
 
 /**
  * An object that binds together everything in coroutineScope and logs events
@@ -32,14 +32,15 @@ interface FlowBinder {
         eventHub: FlowEventHub<E>,
         middleware: Middleware<Flow<E>, Flow<E>>,
         stateHolder: SH,
-        reactor: Reactor<E, SH>
+        reactor: Reactor<E, SH>,
+        logger: MviLogger
     ) {
         val eventFlow = eventHub.observe()
             .onEach { event: E ->
-                Timber.d(TAG, event.toString())
+                logger.d(TAG, event.toString())
                 reactor.react(stateHolder, event)
             }.catch {
-                Timber.e(TAG, it.message, it)
+                logger.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         transformEvents(eventHub, middleware, eventFlow)
@@ -48,10 +49,11 @@ interface FlowBinder {
     fun <E : Event> CoroutineScope.bind(
         eventHub: FlowEventHub<E>,
         middleware: Middleware<Flow<E>, Flow<E>>,
+        logger: MviLogger
     ) {
         val eventFlow = eventHub.observe()
             .catch {
-                Timber.e(TAG, it.message, it)
+                logger.e(TAG, it.message, it)
                 throw it
             }.shareIn(this, SharingStarted.Eagerly)
         transformEvents(eventHub, middleware, eventFlow)

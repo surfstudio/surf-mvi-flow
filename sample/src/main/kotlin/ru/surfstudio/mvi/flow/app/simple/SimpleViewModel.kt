@@ -15,20 +15,8 @@
  */
 package ru.surfstudio.mvi.flow.app.simple
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import ru.surfstudio.mvi.core.event.Event
-import ru.surfstudio.mvi.core.reducer.Reducer
-import ru.surfstudio.mvi.excisable.NewMviStatefulViewModel
-import ru.surfstudio.mvi.excisable.StandardStore
-import ru.surfstudio.mvi.excisable.Store
-import ru.surfstudio.mvi.excisable.StoreHolder
-import ru.surfstudio.mvi.excisable.TeaLikeStore
-import ru.surfstudio.mvi.flow.DslFlowMiddleware
-import ru.surfstudio.mvi.flow.FlowEventHub
 import ru.surfstudio.mvi.flow.FlowState
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import ru.surfstudio.mvi.vm.viewmodel.MviStatefulViewModel
 
 class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
 
@@ -40,41 +28,4 @@ class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
         bindFlow()
     }
 
-}
-
-// MviStoreImpl
-class NewSimpleViewModel : NewMviStatefulViewModel<SimpleState, SimpleEvent>() {
-
-    override val state: FlowState<SimpleState> = FlowState(SimpleState())
-    override val middleware: SimpleMiddleware = SimpleMiddleware(state)
-    override val reducer: SimpleReducer = SimpleReducer()
-
-    init {
-        bindFlow()
-    }
-}
-
-//TeaLikeStore
-class TeaLikeSimpleViewModel : ViewModel(), StoreHolder<SimpleState, SimpleEvent> {
-    override val store = SimpleStore(coroutineScope = viewModelScope)
-
-    init {
-        store.bindFlow()
-    }
-}
-
-fun SimpleStore(
-    coroutineScope: CoroutineScope,
-    initialState: SimpleState = SimpleState(),
-    reducer: Reducer<SimpleEvent, SimpleState> = SimpleReducer(),
-    eventHub: FlowEventHub<SimpleEvent> = FlowEventHub()
-): Store<SimpleState, SimpleEvent> {
-    val state = FlowState(initialState)
-    return Store(
-        initialState = state.currentState,
-        reducer = reducer,
-        flowMiddleware = SimpleMiddleware(state),
-        coroutineScope = coroutineScope,
-        eventHub = eventHub
-    )
 }
