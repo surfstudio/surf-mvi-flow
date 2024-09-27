@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     `maven-publish`
     id("com.jfrog.artifactory")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 // lib info
@@ -15,7 +16,7 @@ publishing {
             version = libVersion
             groupId = libGroup
             artifactId = project.name
-            artifact("$buildDir/outputs/aar/mvi-mappers-$libVersion-release.aar")
+            artifact("${layout.buildDirectory}/outputs/aar/mvi-mappers-$libVersion-release.aar")
         }
     }
 }
@@ -37,11 +38,12 @@ artifactory {
 
 android {
 
-    compileSdk = 31
+    namespace = "ru.surfstudio.mvi.mappers"
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 23
-        targetSdk = 31
+        minSdk = 24
+        targetSdk = 35
         setProperty("archivesBaseName", "mvi-mappers-$libVersion")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,6 +61,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
     }
@@ -68,6 +75,6 @@ dependencies {
     api(project(":mvi-core"))
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("app.cash.turbine:turbine:0.8.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+    testImplementation("app.cash.turbine:turbine:1.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
 }

@@ -3,9 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     `maven-publish`
     id("com.jfrog.artifactory")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
-
-val composeVersion: String by project
 
 // lib info
 val libVersion: String by project
@@ -17,7 +16,7 @@ publishing {
             version = libVersion
             groupId = libGroup
             artifactId = project.name
-            artifact("$buildDir/outputs/aar/mvi-core-$libVersion-release.aar")
+            artifact("${layout.buildDirectory}/outputs/aar/mvi-core-$libVersion-release.aar")
         }
     }
 }
@@ -38,11 +37,12 @@ artifactory {
 }
 
 android {
-    compileSdk = 32
+    namespace = "ru.surfstudio.mvi.core"
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 23
-        targetSdk = 32
+        minSdk = 24
+        targetSdk = 35
         setProperty("archivesBaseName", "mvi-core-$libVersion")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,12 +60,9 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
-    }
-
-    buildFeatures {
-        compose = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
@@ -74,13 +71,14 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    api("androidx.compose.runtime:runtime:$composeVersion")
+    implementation(platform("androidx.compose:compose-bom:2024.09.02"))
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    api("androidx.compose.runtime:runtime")
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:4.6.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
 }
