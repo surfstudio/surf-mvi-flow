@@ -25,9 +25,9 @@ artifactory {
     setContextUrl("https://artifactory.surfstudio.ru/artifactory")
     publish {
         repository {
-            setRepoKey("libs-release-local")
-            setUsername(System.getenv("surf_maven_username"))
-            setPassword(System.getenv("surf_maven_password"))
+            repoKey = "libs-release-local"
+            username = System.getenv("surf_maven_username")
+            password = System.getenv("surf_maven_password")
         }
         defaults {
             publications("aar")
@@ -71,14 +71,14 @@ android {
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2024.09.02"))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
-    api("androidx.compose.runtime:runtime")
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.runtime)
+    api(libs.kotlinx.coroutines.android)
+    api(libs.androidx.lifecycle.runtime.ktx)
+    api(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.logging.timber)
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockito.inline)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

@@ -76,5 +76,5 @@ dependencies {
     testImplementation(libs.test.espresso.core)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.turbine)
-    testImplementation(libs.test.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
