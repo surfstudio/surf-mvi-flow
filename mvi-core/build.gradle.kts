@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     `maven-publish`
-    id("com.jfrog.artifactory")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.artifactory)
+    alias(libs.plugins.kotlin.compose)
 }
 
 // lib info

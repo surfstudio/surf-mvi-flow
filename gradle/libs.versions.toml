@@ -21,6 +21,9 @@ retrofit = "2.11.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 timber = "5.0.1"
 turbine = "1.1.0"
+benManesVersions = "0.51.0"
+spotless = "6.25.0"
+artifactory = "5.2.5"
 
 [libraries]
 #android
@@ -65,5 +68,10 @@ logging-timber = { module = "com.jakewharton.timber:timber", version.ref = "timb
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+artifactory = { id = "com.jfrog.artifactory", version.ref = "artifactory" }

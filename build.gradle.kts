@@ -1,25 +1,28 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
-    val kotlinVersion: String by project
 
     repositories {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.6.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    }
 }
 
 plugins {
-    id("com.diffplug.spotless")
-    id("com.jfrog.artifactory")
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
     `maven-publish`
-    id("com.github.ben-manes.versions")
-    kotlin("plugin.serialization")
-    id("org.jetbrains.kotlin.plugin.compose")
+    // https://www.jfrog.com/confluence/display/JFROG/Gradle+Artifactory+Plugin
+    alias(libs.plugins.artifactory) apply false
+    // https://github.com/diffplug/spotless
+    alias(libs.plugins.spotless)
+    // https://github.com/ben-manes/gradle-versions-plugin
+    alias(libs.plugins.ben.manes.versions)
+    // https://github.com/Kotlin/kotlinx.serialization
+    alias(libs.plugins.kotlin.serialization) apply false
+    // https://developer.android.com/develop/ui/compose/compiler
+    alias(libs.plugins.kotlin.compose) apply false
 }
 
 /**
