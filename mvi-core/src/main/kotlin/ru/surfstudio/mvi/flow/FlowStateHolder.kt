@@ -17,12 +17,12 @@ package ru.surfstudio.mvi.flow
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import ru.surfstudio.mvi.core.state.MutableState
+import ru.surfstudio.mvi.core.state.StateHolder
 
 /**
  * State implementing with Coroutines Flow, that could be observed and changed.
  */
-class FlowState<S>(initialState: S): MutableState<S, Flow<S>> {
+class FlowStateHolder<S>(initialState: S) : StateHolder<S> {
 
     private val mutableFlow = MutableStateFlow(initialState)
 

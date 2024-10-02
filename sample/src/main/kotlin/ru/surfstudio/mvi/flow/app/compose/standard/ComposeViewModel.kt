@@ -15,7 +15,7 @@
  */
 package ru.surfstudio.mvi.flow.app.compose.standard
 
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpNetworkCreator
 import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
@@ -29,7 +29,7 @@ import ru.surfstudio.mvi.vm.compose.emitCommand
 class ComposeViewModel : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
     CommandObserver<NetworkEvent, NetworkCommandEvent> {
 
-    override val state: FlowState<NetworkState> = FlowState(NetworkState())
+    override val stateHolder: FlowStateHolder<NetworkState> = FlowStateHolder(NetworkState())
     override val middleware: ComposeMiddleware =
         ComposeMiddleware(IpNetworkCreator.repository)
     override val reducer: NetworkReducer = NetworkReducer(
