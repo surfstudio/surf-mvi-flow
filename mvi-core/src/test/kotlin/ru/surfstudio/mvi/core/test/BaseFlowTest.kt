@@ -30,7 +30,7 @@ import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowEventHub
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 import ru.surfstudio.mvi.vm.MviStatefulViewModel
 import ru.surfstudio.mvi.vm.android.MviStatefulView
 
@@ -99,7 +99,7 @@ class TestViewModel(
     reducer: TestReducer
 ) : MviStatefulViewModel<TestState, TestEvent>() {
 
-    override val state: FlowState<TestState> = FlowState(TestState())
+    override val stateHolder: FlowStateHolder<TestState> = FlowStateHolder(TestState())
     override val hub: FlowEventHub<TestEvent> = FlowEventHub()
     override val reducer: Reducer<TestEvent, TestState> = reducer
     override val middleware: DslFlowMiddleware<TestEvent> = middleware

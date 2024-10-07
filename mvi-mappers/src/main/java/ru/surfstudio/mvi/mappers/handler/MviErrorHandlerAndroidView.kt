@@ -57,7 +57,7 @@ interface MVIErrorHandlerView<S : Any, E : Event> {
      */
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
-            viewModel.state
+            viewModel.stateHolder
                 .observeState()
                 .collect { collector(it) }
         }

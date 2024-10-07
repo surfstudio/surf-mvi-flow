@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.surfstudio.mvi.flow.app.simple
+package ru.surfstudio.mvi.core.state
 
-import ru.surfstudio.mvi.flow.FlowStateHolder
-import ru.surfstudio.mvi.vm.MviStatefulViewModel
+import kotlinx.coroutines.flow.Flow
 
-internal class SimpleViewModel : MviStatefulViewModel<SimpleState, SimpleEvent>() {
-
-    override val stateHolder: FlowStateHolder<SimpleState> = FlowStateHolder(SimpleState())
-    override val middleware: SimpleMiddleware = SimpleMiddleware(stateHolder)
-    override val reducer: SimpleReducer = SimpleReducer()
-
-    init {
-        bindFlow()
-    }
-}
+/**
+ * State that could be observed and changed.
+ */
+interface StateHolder<S>: MutableState<S>, ImmutableState<S, Flow<S>>

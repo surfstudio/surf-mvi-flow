@@ -16,7 +16,7 @@
 package ru.surfstudio.mvi.flow.app.handler
 
 import kotlinx.coroutines.CoroutineDispatcher
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 import ru.surfstudio.mvi.flow.app.reused.error.ErrorHandlerImpl
 import ru.surfstudio.mvi.flow.app.network.IpRepository
 import ru.surfstudio.mvi.flow.app.reused.NetworkCommandEvent
@@ -34,7 +34,7 @@ class HandlerViewModel(
 ) : MviErrorHandlerViewModel<NetworkState, NetworkEvent>(),
     CommandObserver<NetworkEvent, NetworkCommandEvent> {
 
-    override val state: FlowState<NetworkState> = FlowState(NetworkState())
+    override val stateHolder: FlowStateHolder<NetworkState> = FlowStateHolder(NetworkState())
     override val middleware: HandlerMiddleware =
         HandlerMiddleware(loadOnStart, repository, dispatcher)
     override val reducer: NetworkReducer = NetworkReducer(ErrorHandlerImpl(), ::emitCommand)

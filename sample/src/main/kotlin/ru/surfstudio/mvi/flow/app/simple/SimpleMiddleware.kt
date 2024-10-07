@@ -19,20 +19,23 @@ import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import ru.surfstudio.mvi.flow.BaseFlowMiddleware
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.flow.app.simple.SimpleEvent.*
 import java.io.IOException
 
-class SimpleMiddleware(
-    private val state: FlowState<SimpleState>
+internal class SimpleMiddleware(
+    private val stateHolder: FlowStateHolder<SimpleState>
 ) : BaseFlowMiddleware<SimpleEvent> {
+
+    private val state: SimpleState
+        get() = stateHolder.currentState
 
     override fun transform(eventStream: Flow<SimpleEvent>): Flow<SimpleEvent> {
         return eventStream.transformations {
             addAll(
                 StartLoadingClick::class
-                    filter { state.currentState.request == RequestState.None }
+                    filter { state.request == RequestState.None }
                     streamToStream { requestFlow(it) },
                 SimpleClick::class react {
                     println("debug react sample")

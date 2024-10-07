@@ -20,7 +20,7 @@ import ru.surfstudio.mvi.core.event.Event
 import ru.surfstudio.mvi.core.event.MviLifecycleEvent
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 
-sealed class SimpleEvent : Event {
+internal sealed class SimpleEvent : Event {
 
     data class LifecycleEvent(override var event: Lifecycle.Event) : SimpleEvent(),
         MviLifecycleEvent

@@ -18,13 +18,13 @@ package ru.surfstudio.mvi.flow.app.simple
 import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 
-data class SimpleState(
+internal data class SimpleState(
     val title: String = "Кликай меня полностью",
     val counter: Int = 42,
     val request: RequestState = RequestState.None
 )
 
-class SimpleReducer: Reducer<SimpleEvent, SimpleState> {
+internal class SimpleReducer: Reducer<SimpleEvent, SimpleState> {
 
     override fun reduce(state: SimpleState, event: SimpleEvent): SimpleState {
         return when(event) {

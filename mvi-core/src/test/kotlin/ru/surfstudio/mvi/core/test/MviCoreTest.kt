@@ -48,7 +48,7 @@ class MviCoreTest : BaseFlowTest() {
 
     @Test
     fun testStateChanges() = runTest {
-        val flow = testView?.viewModel?.state?.observeState()
+        val flow = testView?.viewModel?.stateHolder?.observeState()
 
         Assert.assertEquals(flow?.firstOrNull()?.state, INITIAL_STATE_VALUE)
         testView?.emit(TestEvent.Data("test"))
@@ -57,7 +57,7 @@ class MviCoreTest : BaseFlowTest() {
 
     @Test
     fun testStateUnchangedOnLogic() = runTest {
-        val flow = testView?.viewModel?.state?.observeState()
+        val flow = testView?.viewModel?.stateHolder?.observeState()
 
         Assert.assertEquals(flow?.firstOrNull()?.state, INITIAL_STATE_VALUE)
         testView?.emit(TestEvent.Logic)

@@ -81,7 +81,7 @@ interface MviStatefulView<S : Any, E : Event> : MviView<E> {
      */
     fun observeState(collector: suspend (S) -> Unit) {
         uiScope.launch(Dispatchers.Main) {
-            viewModel.state
+            viewModel.stateHolder
                 .observeState()
                 .collect { collector(it) }
         }

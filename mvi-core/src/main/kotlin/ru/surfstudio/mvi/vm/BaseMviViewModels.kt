@@ -22,7 +22,7 @@ import ru.surfstudio.mvi.core.reducer.Reducer
 import ru.surfstudio.mvi.flow.DslFlowMiddleware
 import ru.surfstudio.mvi.flow.FlowBinder
 import ru.surfstudio.mvi.flow.FlowEventHub
-import ru.surfstudio.mvi.flow.FlowState
+import ru.surfstudio.mvi.flow.FlowStateHolder
 
 /**
  * An interface of ViewModel providing implementations of observable
@@ -45,11 +45,11 @@ abstract class MviViewModel<E : Event> : ViewModel(), FlowBinder {
  */
 abstract class MviStatefulViewModel<S : Any, E : Event>: MviViewModel<E>() {
 
-    abstract val state: FlowState<S>
+    abstract val stateHolder: FlowStateHolder<S>
     abstract val reducer: Reducer<E, S>
 
     /** Must be called in descendant class `init` */
     override fun bindFlow() {
-        viewModelScope.bind(hub, middleware, state, reducer)
+        viewModelScope.bind(hub, middleware, stateHolder, reducer)
     }
 }
