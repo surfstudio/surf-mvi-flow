@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlinx-serialization")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
 }
 
-val composeVersion: String by project
-
 android {
-    compileSdk = 32
+    namespace = "ru.surfstudio.mvi.flow.app"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "ru.surfstudio.mvi.sample"
+        applicationId = "ru.surfstudio.mvi.flow.app"
         minSdk = 24
-        targetSdk = 32
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -22,12 +22,9 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
-    }
-
-    buildFeatures {
-        compose = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
@@ -35,31 +32,49 @@ android {
     }
 }
 
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    metricsDestination = layout.buildDirectory.dir("compose_compiler")
+    stabilityConfigurationFile = rootProject.layout.projectDirectory.file("stability_config.conf")
+}
+
 dependencies {
     implementation(project(":mvi-mappers"))
 
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material)
 
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.6.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
-    implementation("androidx.fragment:fragment-ktx:1.4.1")
+    // android
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.activity)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.fragment.ktx)
 
     // network
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libs.network.retrofit)
+    implementation(libs.network.logging.interceptor)
+    implementation(libs.network.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.network.kotlinx.serialization.json)
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testImplementation("io.mockk:mockk:1.12.4")
-    testImplementation("app.cash.turbine:turbine:0.8.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+    // other
+    implementation(libs.logging.timber)
+
+    // test
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.junit.jupiter.api)
+    testImplementation(libs.test.junit.android)
+    testImplementation(libs.test.espresso.core)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

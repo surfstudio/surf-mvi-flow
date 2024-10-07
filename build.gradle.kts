@@ -1,22 +1,28 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
+
     repositories {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath("com.android.tools.build:gradle:7.2.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
-    }
 }
 
 plugins {
-    id("com.diffplug.spotless")
-    id("com.jfrog.artifactory")
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
     `maven-publish`
-    kotlin("plugin.serialization") version "1.6.21"
-    id("com.github.ben-manes.versions")
+    // https://www.jfrog.com/confluence/display/JFROG/Gradle+Artifactory+Plugin
+    alias(libs.plugins.artifactory) apply false
+    // https://github.com/diffplug/spotless
+    alias(libs.plugins.spotless)
+    // https://github.com/ben-manes/gradle-versions-plugin
+    alias(libs.plugins.ben.manes.versions)
+    // https://github.com/Kotlin/kotlinx.serialization
+    alias(libs.plugins.kotlin.serialization) apply false
+    // https://developer.android.com/develop/ui/compose/compiler
+    alias(libs.plugins.kotlin.compose) apply false
 }
 
 /**
@@ -45,7 +51,7 @@ subprojects {
 }
 
 fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     val isStable = stableKeyword || regex.matches(version)
     return isStable.not()

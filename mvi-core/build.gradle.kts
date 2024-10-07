@@ -1,11 +1,10 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     `maven-publish`
-    id("com.jfrog.artifactory")
+    alias(libs.plugins.artifactory)
+    alias(libs.plugins.kotlin.compose)
 }
-
-val composeVersion: String by project
 
 // lib info
 val libVersion: String by project
@@ -17,7 +16,7 @@ publishing {
             version = libVersion
             groupId = libGroup
             artifactId = project.name
-            artifact("$buildDir/outputs/aar/mvi-core-$libVersion-release.aar")
+            artifact("${layout.buildDirectory}/outputs/aar/mvi-core-$libVersion-release.aar")
         }
     }
 }
@@ -26,9 +25,9 @@ artifactory {
     setContextUrl("https://artifactory.surfstudio.ru/artifactory")
     publish {
         repository {
-            setRepoKey("libs-release-local")
-            setUsername(System.getenv("surf_maven_username"))
-            setPassword(System.getenv("surf_maven_password"))
+            repoKey = "libs-release-local"
+            username = System.getenv("surf_maven_username")
+            password = System.getenv("surf_maven_password")
         }
         defaults {
             publications("aar")
@@ -38,11 +37,12 @@ artifactory {
 }
 
 android {
-    compileSdk = 32
+    namespace = "ru.surfstudio.mvi.core"
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 23
-        targetSdk = 32
+        minSdk = 24
+        targetSdk = 35
         setProperty("archivesBaseName", "mvi-core-$libVersion")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,12 +60,9 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
-    }
-
-    buildFeatures {
-        compose = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
@@ -74,13 +71,14 @@ android {
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    api("androidx.compose.runtime:runtime:$composeVersion")
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.runtime)
+    api(libs.kotlinx.coroutines.android)
+    api(libs.androidx.lifecycle.runtime.ktx)
+    api(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.logging.timber)
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:4.6.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2")
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockito.inline)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

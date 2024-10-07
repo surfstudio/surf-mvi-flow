@@ -120,6 +120,6 @@ class TestView(
     // must be mocked for test based on mocked TestScope
     override val uiScope: CoroutineScope = viewModel.viewModelScope
 
-    override fun getLifecycle(): Lifecycle =
+    override val lifecycle: Lifecycle =
         LifecycleRegistry(Mockito.mock(LifecycleOwner::class.java))
 }
