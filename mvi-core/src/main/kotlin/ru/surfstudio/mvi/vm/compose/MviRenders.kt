@@ -30,7 +30,7 @@ import ru.surfstudio.mvi.vm.MviStatefulViewModel
 infix fun <S : Any, E : Event> MviStatefulViewModel<S, E>.renders(
     render: @Composable ComposedViewContext<E>.(S) -> Unit
 ) {
-    val state by state.observeState().collectAsState(initial = state.currentState)
+    val state by stateHolder.observeState().collectAsState(initial = stateHolder.currentState)
     val scope = rememberCoroutineScope()
 
     val composedViewContext = ComposedViewContext<E> { event ->

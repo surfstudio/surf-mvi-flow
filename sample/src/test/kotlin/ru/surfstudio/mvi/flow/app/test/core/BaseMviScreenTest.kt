@@ -93,7 +93,7 @@ abstract class BaseMviScreenTest : BaseUnitTest() {
         expectedStatesChecks: List<(S) -> Boolean>
     ) {
         runTimeoutTest {
-            state.observeState().test {
+            stateHolder.observeState().test {
                 startEvent?.let { hub.emit(startEvent) }
                 (expectedStatesChecks.indices).forEach { index ->
                     val state = awaitItem()
@@ -111,7 +111,7 @@ abstract class BaseMviScreenTest : BaseUnitTest() {
         expectedFinalStateCheck: (S) -> Boolean
     ) {
         runTimeoutTest {
-            state.observeState().test {
+            stateHolder.observeState().test {
                 startEvents?.let { startEvents.forEach { hub.emit(it) } }
                 while (true) {
                     val state = awaitItem()
@@ -133,7 +133,7 @@ abstract class BaseMviScreenTest : BaseUnitTest() {
         runTimeoutTest {
             merge(
                 hub.observe().flatMapLatest { flowOf(MviData<S, E>(event = it)) },
-                state.observeState().flatMapLatest { flowOf(MviData(state = it)) },
+                stateHolder.observeState().flatMapLatest { flowOf(MviData(state = it)) },
             ).test {
                 startAction()
                 (expectedData.indices).forEach { index ->
