@@ -1,0 +1,336 @@
+//Переменная для пропуска
+SKIP_JOB = false
+//--------------------------------------------------------------------------------------------------------------------------------------------------
+pipeline {
+    options {
+        buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '30')) // Указываем дни и кол-во хранимых сборок;
+        disableResume()                                                     // Запрет запуска сборки при перезапуске контроллера;
+    }
+    agent {
+        label 'linux-02' //Label worker Node;
+    }
+    parameters {
+        string(name: 'sourceBranch',      defaultValue: '', description: 'Ветка с pr, обязательный параметр')
+        string(name: 'destinationBranch', defaultValue: '', description: 'Ветка, в которую будет мержиться пр, обязательный параметр')
+    }
+    environment {
+        gitCred          = 'global_github_builder-token'                          //Креды Github Builder. Находятся в Jenkins -> Manage Credentials.
+        repoUrl          = 'https://github.com/surfstudio/surf-mvi-flow' //Обязательно указывваем репу, в противном случае не будет запускаться с параметрами.
+
+        JAVA_HOME        = "/usr/lib/jvm/java-1.17.0-openjdk-amd64"
+        ANDROID_SDK_ROOT = "/opt/android-sdk-linux"
+        ANDROID_HOME     = "/opt/android-sdk-linux"
+
+        BUILD_ARTIFACT_PATH = '**/*.apk, app/build/outputs/bundle/release/*.aab, **/mapping.txt'
+        TESTS_ATRIFACT_PATH = '*/test-results/testReleaseUnitTest/.xml'
+
+    }
+    //Тригер сборки и переменные прилетевшие с вебхуком
+//    triggers {
+//        GenericTrigger(
+//                genericVariables: [
+//                        [key: 'sourceBranch',        value: '$.pull_request.head.ref'],
+//                        [key: 'destinationBranch',   value: '$.pull_request.base.ref'],
+//                        [key: 'repoUrl',             value: '$.repository.html_url'],
+//                        [key: 'targetBranchChanged', value: '$.target_branch.changed']
+//                ],
+//                causeString              : 'Triggered by Github',
+//                regexpFilterText         : ("\$repoUrl"),                                           //Regexp для фильтрации запуска
+//                regexpFilterExpression   : ("https://github.com/surfstudio/android-ci-cd-standard"), //Указать репу проекта
+//                printContributedVariables: true,
+//                printPostContent         : true
+//        )
+//    }
+//----------------------------------------------------------Init-----------------------------------------------------------------------------------
+    stages {
+        stage('Init') {
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script {
+                    //Отмечаем где собираем проект
+                    currentBuild.description = "Building on ${env.NODE_NAME}, sourceBranch: ${env.sourceBranch}, destinationBranch: ${env.destinationBranch}"
+                }
+            }
+            post {
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+//----------------------------------------------------------Checkout-------------------------------------------------------------------------------
+        stage('Checkout'){
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script {
+                    try {
+                        sh """
+                            git reset --merge
+                            git reset
+                            git checkout .
+                            git clean -fdx
+                        """
+                    } catch (Exception ex) {
+                        echo '^^^^ Exception occurred: ' + ex.toString()
+                    }
+
+                    checkout scm: [
+                            $class           : 'GitSCM',
+                            userRemoteConfigs: [[url: env.repoUrl, credentialsId: env.gitCred]],
+                            branches         : [[name: env.sourceBranch]]],
+                            poll: true
+
+                    // Проверяем есть ли в комите “skip ci”, если да, то пропускаем все следующие stage;
+                    String resultSkipCi
+                    try {
+                        resultSkipCi = sh (script: "git log -1 --pretty=%B | grep 'skip cicd'", returnStdout: true)
+                    } catch (Exception ex) {
+                        echo "No 'skip cicd' to commit message"
+                    }
+                    if (resultSkipCi) {
+                        SKIP_JOB = true
+                    }
+                }
+            }
+            post {
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+
+
+//----------------------------------------------------------Code Style Formatting--------------------------------------------------------------------------------
+        stage('Code Style Formatting') {
+            when {
+                environment name: "targetBranchChanged", value: null   //Пропускаем шаг если запушен автоматически при merge pull request
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script {
+                    String resultChangedFile
+                    // Проверяем есть ли изменения в .kt файлах;
+                    try {
+                        resultChangedFile = sh (script: "git log --no-merges --first-parent --oneline --name-only origin/${env.destinationBranch}..${env.sourceBranch} | grep '.kt\$'", returnStdout: true)
+                    } catch (Exception ex) {
+                        echo "No *.kt files for formatting $ex"
+                    }
+                    // Если файлы сушествую, то
+                    if (resultChangedFile) {
+                        try {
+                            // Форматируем вывод через запятую
+                            resultChangedFilePath = resultChangedFile.replace("\n",",")
+
+                            // Удаляем символ переноса строки
+                            resultChangedFilePath = resultChangedFilePath.substring(0, resultChangedFilePath.length()-1)
+
+                            //Форматируем кода указанных файлов согласно правилам линтера
+                            sh "./gradlew ktlintFilesFormat -PlintFiles=${resultChangedFilePath} -Dorg.gradle.java.home=${env.JAVA_HOME}"
+                        } catch (Exception ex) {
+                            echo '^^^^ Exception occurred: ' + ex.toString()
+                            unstable(message: "Что-то пошло не так)")
+                        }
+                    }
+                    //Проверяем изменились ли файлы командой gradlew ktlintFilesFormat
+                    resultNewChangedFile = sh (script: "git status --porcelain --untracked-files=no", returnStdout: true)
+
+                    if (resultNewChangedFile) {
+                        //Комитим и пушим изменения
+                        try {
+                            //Пробуем получить имя задачи в Jira
+                            jiraIssueKey = sh (script: "echo ${env.sourceBranch} | grep -o \'^[A-Z]\\{3,5\\}-[0-9]\\{3,5\\}\'", returnStdout: true)
+                        } catch (Exception ex) {
+                            echo "Не удалось получить имя задачи в Jira, будет взято за имя TASK-12345"
+                            jiraIssueKey = "TASK-12345"
+                        }
+//                        //Получаем хеш коммита
+//                        commitHash   = sh (script: 'git rev-parse HEAD', returnStdout: true)
+//                        sh "git commit -a -m \"Code Formatting [skip cicd] " + jiraIssueKey + " Last formatted commit is " + commitHash.take(8) + "\""
+//                        sh "git push ${env.repoUrl}"
+                    }
+                }
+            }
+            post {
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+//----------------------------------------------------------PreMerge--------------------------------------------------------------------------------
+        stage('PreMerge') {
+            when {
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "git merge origin/${env.destinationBranch} --no-ff --no-commit"
+                }
+            }
+            post {
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+//----------------------------------------------------------Build--------------------------------------------------------------------------------
+        stage('Build mvi-core') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd mvi-core && ./gradlew assembleRelease"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем артефакты
+                    archiveArtifacts artifacts: env.BUILD_ARTIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+
+        stage('Build mvi-mappers') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd mvi-mappers && ./gradlew assembleRelease"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем артефакты
+                    archiveArtifacts artifacts: env.BUILD_ARTIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+
+        stage('Build sample') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd sample && ./gradlew assembleRelease"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем артефакты
+                    archiveArtifacts artifacts: env.BUILD_ARTIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+//----------------------------------------------------------Unit Test--------------------------------------------------------------------------------
+        stage('Unit Test mvi-core') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd mvi-core && ./gradlew testReleaseUnitTest"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем результаты тестов
+                    archiveArtifacts artifacts: env.TESTS_ATRIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+
+        stage('Unit Test mvi-mappers') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd mvi-mappers && ./gradlew testReleaseUnitTest"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем результаты тестов
+                    archiveArtifacts artifacts: env.TESTS_ATRIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+
+        stage('Unit Test sample') {
+            when {
+                environment name: "targetBranchChanged", value: null
+                expression { SKIP_JOB != true }
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script{
+                    sh "cd sample && ./gradlew testReleaseUnitTest"
+                }
+            }
+            post {
+                success {
+                    //Сохраняем результаты тестов
+                    archiveArtifacts artifacts: env.TESTS_ATRIFACT_PATH, allowEmptyArchive: true
+                }
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+//----------------------------------------------------------make-danger--------------------------------------------------------------------------------
+        stage('Comment - make danger') {
+            when {
+                environment name: "targetBranchChanged", value: null
+            }
+            steps {
+                gitNotify(stageName: "${env.STAGE_NAME}", statusName: "PENDING")
+                script {
+                    sh """
+
+                        echo 'make danger not yet implemented'
+                    """
+                }
+            }
+            post {
+                always {
+                    gitNotify(stageName: "${env.STAGE_NAME}", statusName: currentBuild.currentResult)
+                }
+            }
+        }
+    }
+    post {
+        always {
+            //Чистим рабочий каталог
+            cleanWs()
+        }
+    }
+}
+//----------------------------------------------------------Finish--------------------------------------------------------------------------------------------------------
