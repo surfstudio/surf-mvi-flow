@@ -29,7 +29,7 @@ import ru.surfstudio.mvi.flow.app.handler.HandlerActivity
 import ru.surfstudio.mvi.flow.app.simple.request.RequestState
 import ru.surfstudio.mvi.vm.android.MviStatefulView
 
-internal class SimpleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleEvent> {
+internal class SampleActivity : AppCompatActivity(), MviStatefulView<SimpleState, SimpleEvent> {
 
     override val viewModel by viewModels<SimpleViewModel>()
 
