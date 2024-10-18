@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Mviflow"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".simple.SimpleActivity"
+            android:name=".simple.SampleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
